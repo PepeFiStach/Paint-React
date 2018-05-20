@@ -11,7 +11,27 @@ class App extends Component {
   }
   render() {
     return (
-      <ColoredRect />            
+      <div className='app-wrapper wrapper'>
+
+        <div className='header'>
+          <div className='header-wrapper wrapper'>
+
+          </div>
+        </div>
+
+        <div className='app-body'>
+          <div className='app-body-wrapper wrapper'>
+            <ColoredRect />            
+          </div>
+        </div>
+
+        <div className='footer'>
+          <div className='footer-wrapper wrapper'>
+
+          </div>
+        </div>
+        
+      </div>
     );
   }
 }

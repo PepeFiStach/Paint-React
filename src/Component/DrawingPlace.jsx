@@ -9,6 +9,7 @@ export default class ColoredRect extends React.Component {
     this.state = {
       mode: 'brush',
       isDrawing: false,
+      color: '#df4b26'
     };
   }
 
@@ -23,6 +24,10 @@ export default class ColoredRect extends React.Component {
 
   changeMode = (dataFromToolBar) => {
     this.setState({mode: dataFromToolBar});
+  }
+
+  changeColor = (dataFromToolBar) => {
+    this.setState({color: dataFromToolBar});
   }
 
   mouseUp() {
@@ -53,7 +58,7 @@ export default class ColoredRect extends React.Component {
       context.globalCompositeOperation = 'destination-out';
     }
 
-    context.strokeStyle = "#df4b26";
+    context.strokeStyle = this.state.color;
     context.lineJoin = "round";
     context.lineWidth = 5;
     context.beginPath();
@@ -81,7 +86,7 @@ export default class ColoredRect extends React.Component {
   }
 
   render() {
-    const {canvas, mode} = this.state;
+    const {canvas} = this.state;
     return (
       <Stage width={window.innerWidth} height={window.innerHeight}>
       <Layer>
@@ -95,7 +100,7 @@ export default class ColoredRect extends React.Component {
           onMouseUp={this.mouseUp.bind(this)} 
           onMouseMove={this.mouseMove.bind(this)}/>
       </Layer>
-          <ToolBar callbackFromParent={this.changeMode}/>
+          <ToolBar callbackFromParent={this.changeMode} color={this.changeColor}/>
     </Stage>
     );
   }
