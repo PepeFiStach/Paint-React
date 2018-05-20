@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Stage, Layer, Image } from 'react-konva';
+import { Stage, Layer, Image, Rect } from 'react-konva';
 import Konva from 'konva';
+import ToolBar from './ToolBar.jsx';
 
 export default class ColoredRect extends React.Component {
   constructor() {
@@ -19,6 +19,10 @@ export default class ColoredRect extends React.Component {
     const context = canvas.getContext('2d');
 
     this.setState({canvas, context});
+  }
+
+  changeMode = (dataFromToolBar) => {
+    this.setState({mode: dataFromToolBar});
   }
 
   mouseUp() {
@@ -44,6 +48,9 @@ export default class ColoredRect extends React.Component {
 
     if (mode === 'brush') {
       context.globalCompositeOperation = 'source-over';
+    }
+    if (mode === 'eraser') {
+      context.globalCompositeOperation = 'destination-out';
     }
 
     context.strokeStyle = "#df4b26";
@@ -74,17 +81,22 @@ export default class ColoredRect extends React.Component {
   }
 
   render() {
-    const {canvas} = this.state;
+    const {canvas, mode} = this.state;
     return (
-      <Image ref={node => {this.image = node}}
-      image={canvas}
-      stroke={'blue'}
-      x={window.innerWidth / 4}
-      y={window.innerHeight / 4}
-      fill={'black'}
-      onMouseDown={this.mouseDown.bind(this)}
-      onMouseUp={this.mouseUp.bind(this)} 
-      onMouseMove={this.mouseMove.bind(this)}/>
+      <Stage width={window.innerWidth} height={window.innerHeight}>
+      <Layer>
+        <Image ref={node => {this.image = node}}
+          image={canvas}
+          stroke={'blue'}
+          x={window.innerWidth / 4}
+          y={window.innerHeight / 4}
+          fill={'black'}
+          onMouseDown={this.mouseDown.bind(this)}
+          onMouseUp={this.mouseUp.bind(this)} 
+          onMouseMove={this.mouseMove.bind(this)}/>
+      </Layer>
+          <ToolBar callbackFromParent={this.changeMode}/>
+    </Stage>
     );
   }
 }
