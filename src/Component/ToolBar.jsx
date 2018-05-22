@@ -16,12 +16,6 @@ export default class ToolBar extends React.Component {
         }
     }
 
-    callbackFromChild = (dataFromChild) => {
-        // console.log(dataFromChild);
-        // let tmp = dataFromChild;
-        // return tmp;
-    }
-
     changeMode = () => {
         if (!this.state.click) {
             this.setState({
@@ -71,7 +65,7 @@ export default class ToolBar extends React.Component {
     render() {
         return (
             <Layer draggable={this.state.draggable} ref={'layer'}>
-            <Rect width={200} height={500} fill={'green'}/>
+                <Rect width={200} height={500} fill={'green'}/>
                 <Eraser changeMode={this.changeMode}/>
                 <ColorPallete changeColor={this.changeColor} returnDragX={this.returnDragX} returnDragY={this.returnDragY}/>
                 <Rect width={10} height={10} fill={'yellow'} onMouseDown={this.dragToolBar.bind(this)} x={200}/>

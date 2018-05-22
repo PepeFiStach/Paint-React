@@ -85,6 +85,13 @@ export default class ColoredRect extends React.Component {
     this.image.getLayer().draw();
   }
 
+  clearDrawingPlace() {
+    const {canvas, context} = this.state;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    this.image.getLayer().draw();
+    console.log('as');
+  }
+
   render() {
     const {canvas} = this.state;
     return (
@@ -99,6 +106,7 @@ export default class ColoredRect extends React.Component {
           onMouseDown={this.mouseDown.bind(this)}
           onMouseUp={this.mouseUp.bind(this)} 
           onMouseMove={this.mouseMove.bind(this)}/>
+          <Image ref={node => {this.img = node}} width={500} height={500} onMouseDown={this.clearDrawingPlace.bind(this)} fill={'red'}/>
       </Layer>
           <ToolBar mode={this.changeMode} color={this.changeColor}/>
     </Stage>
