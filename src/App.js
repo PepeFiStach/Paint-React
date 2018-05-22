@@ -15,7 +15,7 @@ class App extends Component {
 
         <div className='header'>
           <div className='header-wrapper wrapper'>
-
+            Soon there will be a header here !
           </div>
         </div>
 
@@ -27,10 +27,10 @@ class App extends Component {
 
         <div className='footer'>
           <div className='footer-wrapper wrapper'>
-
+            Soon there will be a footer here !
           </div>
         </div>
-        
+
       </div>
     );
   }

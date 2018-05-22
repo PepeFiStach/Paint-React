@@ -11,6 +11,7 @@ export default class ToolBar extends React.Component {
         this.state = {
             mode: '',
             color: '',
+            draggable: false,
         }
     }
 
@@ -19,21 +20,46 @@ export default class ToolBar extends React.Component {
             mode: 'eraser',
         });
 
-        this.props.callbackFromParent(this.state.mode);
+        this.props.mode(this.state.mode);
+
+        console.log('eraser');
     }
 
     changeColor = (dataFromColorPallete) => {
         this.setState({color: dataFromColorPallete});
-        // console.log(this.state.color);
         this.props.color(this.state.color);
-        
-      }
+    }
+
+    dragToolBar() {
+        const {draggable} = this.state;
+
+        if (!draggable) {
+            this.setState({
+                draggable: true,
+            });
+        } else {
+            this.setState({
+                draggable: false,
+            })
+        }
+    }
+
+    returnDragX = () => {
+        let tmp = this.refs.layer.x();
+        return tmp;
+    }
+
+    returnDragY = () => {
+        let tmp = this.refs.layer.y();
+        return tmp;
+    }
 
     render() {
         return (
-            <Layer>
+            <Layer draggable={this.state.draggable} ref={'layer'}>
                 <Eraser changeMode={this.changeMode}/>
-                <ColorPallete changeColor={this.changeColor}/>
+                <ColorPallete changeColor={this.changeColor} returnDragX={this.returnDragX} returnDragY={this.returnDragY}/>
+                <Rect width={10} height={10} fill={'yellow'} onClick={this.dragToolBar.bind(this)} x={250}/>
             </Layer>
         )
     }

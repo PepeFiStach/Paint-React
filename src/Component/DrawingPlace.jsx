@@ -54,6 +54,7 @@ export default class ColoredRect extends React.Component {
     if (mode === 'brush') {
       context.globalCompositeOperation = 'source-over';
     }
+
     if (mode === 'eraser') {
       context.globalCompositeOperation = 'destination-out';
     }
@@ -80,7 +81,6 @@ export default class ColoredRect extends React.Component {
     context.lineTo(localPos.x, localPos.y);
     context.closePath();
     context.stroke();
-
     this.lastPointerPosition = pos;
     this.image.getLayer().draw();
   }
@@ -100,7 +100,7 @@ export default class ColoredRect extends React.Component {
           onMouseUp={this.mouseUp.bind(this)} 
           onMouseMove={this.mouseMove.bind(this)}/>
       </Layer>
-          <ToolBar callbackFromParent={this.changeMode} color={this.changeColor}/>
+          <ToolBar mode={this.changeMode} color={this.changeColor}/>
     </Stage>
     );
   }

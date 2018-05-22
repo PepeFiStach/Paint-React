@@ -17,13 +17,23 @@ export default class ColorPallete extends React.Component {
         .then(resp => {
             if (resp.ok) {
                 const canvas = document.createElement('canvas');
+                canvas.className = 'color-pallete';
+                canvas.style.position = 'absolute';
                 const context = canvas.getContext('2d');
+
                 const image = new window.Image();
                 canvas.width = 200;
                 canvas.height = 200;
                 image.src = resp.url;
                 image.crossOrigin = "Anonymous";
-        
+
+
+
+                context.fillStyle = 'grey';
+                context.fillRect(0 , 0, canvas.width, canvas.height);
+
+
+                
                 image.onload = () => {
                     context.drawImage(image, 0, 0, canvas.width, canvas.height);
                     
@@ -48,17 +58,16 @@ export default class ColorPallete extends React.Component {
         this.lastPointerPosition = stage.getPointerPosition();
         
         let pos = {
-            x: this.lastPointerPosition.x - this.image.x(),
-            y: this.lastPointerPosition.y - this.image.y(),
+            x: this.lastPointerPosition.x - this.props.returnDragX(),
+            y: this.lastPointerPosition.y - this.props.returnDragY() - this.image.y(),
         };
         
         let imageData = context.getImageData(pos.x, pos.y, 1, 1);
-        let pixel = imageData.data;
-
+        let pixel = imageData.data; 
+                
         this.setState({
             pixel: pixel,
         });
-
         // this.image.getLayer().draw();
     }
     
@@ -75,13 +84,12 @@ export default class ColorPallete extends React.Component {
     } 
 
     render() {
-        const {canvas} = this.state;
+        const {canvas, x, y} = this.state;
         return (
             <Image image={canvas}
                 ref={node => {this.image = node}}
                 onMouseMove={this.mouseMove}
                 onMouseDown={this.mosueClick}
-                x={0}
                 y={100}/>
         )
     }
