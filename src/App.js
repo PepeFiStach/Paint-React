@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './Image/logo.svg';
 import './App.css';
 import { Stage, Layer, Text } from "react-konva";
 import ColoredRect from './Component/DrawingPlace.jsx';
