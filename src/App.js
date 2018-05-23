@@ -15,7 +15,21 @@ class App extends Component {
 
         <div className='header'>
           <div className='header-wrapper wrapper'>
-            Soon there will be a header here !
+            <div className='nav-bar'>
+              <ul className='nav-bar-list list'>
+                <li className='nav-bar-list-iteam'>
+                <a>OPEN</a>
+                </li>
+
+                <li className='nav-bar-list-iteam'>
+                <a>CLEAR</a>
+                </li>
+
+                <li className='nav-bar-list-iteam'>
+                <a>SAVE</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
