@@ -1,10 +1,11 @@
+import './App.css';
 import React, { Component } from 'react';
 import { Stage, Layer, Image, Rect } from 'react-konva';
 import Konva from 'konva';
-import ToolBar from './ToolBar.jsx';
-import Header from './Header.jsx';
+import ToolBar from './Component/ToolBar.jsx';
+import Header from './Component/Header.jsx';
 
-export default class ColoredRect extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,9 +98,11 @@ export default class ColoredRect extends React.Component {
   render() {
     const {canvas} = this.state;
     return (
-      <div>
+      <div className='app-wrapper wrapper'>
+      
         <Header clearDrawingPlace={this.clearDrawingPlace}/>
-        <div>
+
+        <div className='app-body'>
           <Stage width={window.innerWidth} height={window.innerHeight}>
             <Layer>
               <Image ref={node => {this.image = node}}
@@ -118,6 +121,13 @@ export default class ColoredRect extends React.Component {
                 />
           </Stage>
         </div>
+        
+        <div className='footer'>
+          <div className='footer-wrapper wrapper'>
+            Soon there will be a footer here !
+          </div>
+        </div>
+
       </div>
     );
   }
