@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Stage, Layer, Image, Rect } from 'react-konva';
 import Konva from 'konva';
 import ToolBar from './ToolBar.jsx';
+import Header from './Header.jsx';
 
 export default class ColoredRect extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       mode: 'brush',
       isDrawing: false,
@@ -19,6 +20,7 @@ export default class ColoredRect extends React.Component {
     canvas.height = window.innerHeight / 2;
     const context = canvas.getContext('2d');
 
+    
     this.setState({canvas, context});
   }
 
@@ -85,31 +87,38 @@ export default class ColoredRect extends React.Component {
     this.image.getLayer().draw();
   }
 
-  clearDrawingPlace() {
+  clearDrawingPlace = () => {
     const {canvas, context} = this.state;
+    const navBarIteam = document.querySelector('.nav-bar-list-iteam');
     context.clearRect(0, 0, canvas.width, canvas.height);
     this.image.getLayer().draw();
-    console.log('as');
   }
 
   render() {
     const {canvas} = this.state;
     return (
-      <Stage width={window.innerWidth} height={window.innerHeight}>
-      <Layer>
-        <Image ref={node => {this.image = node}}
-          image={canvas}
-          stroke={'blue'}
-          x={window.innerWidth / 4}
-          y={window.innerHeight / 4}
-          fill={'black'}
-          onMouseDown={this.mouseDown.bind(this)}
-          onMouseUp={this.mouseUp.bind(this)} 
-          onMouseMove={this.mouseMove.bind(this)}/>
-          <Image ref={node => {this.img = node}} width={500} height={500} onMouseDown={this.clearDrawingPlace.bind(this)} fill={'red'}/>
-      </Layer>
-          <ToolBar mode={this.changeMode} color={this.changeColor}/>
-    </Stage>
+      <div>
+        <Header clearDrawingPlace={this.clearDrawingPlace}/>
+        <div>
+          <Stage width={window.innerWidth} height={window.innerHeight}>
+            <Layer>
+              <Image ref={node => {this.image = node}}
+                image={canvas}
+                stroke={'blue'}
+                x={window.innerWidth / 4}
+                y={window.innerHeight / 4}
+                fill={'black'}
+                onMouseDown={this.mouseDown.bind(this)}
+                onMouseUp={this.mouseUp.bind(this)} 
+                onMouseMove={this.mouseMove.bind(this)}
+              />
+            </Layer>
+                <ToolBar mode={this.changeMode} 
+                  color={this.changeColor}
+                />
+          </Stage>
+        </div>
+      </div>
     );
   }
 }

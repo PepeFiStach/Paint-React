@@ -56,7 +56,9 @@ export default class Eraser extends React.Component {
 
     render() {
         return (
-            <Image image={this.state.image} onClick={this.mouseClick}/>
+            <Image image={this.state.image} 
+                onClick={this.mouseClick}
+            />
         )
     }
 } 

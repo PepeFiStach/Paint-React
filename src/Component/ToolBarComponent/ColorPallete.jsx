@@ -90,7 +90,8 @@ export default class ColorPallete extends React.Component {
                 ref={node => {this.image = node}}
                 onMouseMove={this.mouseMove}
                 onMouseDown={this.mosueClick}
-                y={100}/>
+                y={100}
+            />
         )
     }
 }
