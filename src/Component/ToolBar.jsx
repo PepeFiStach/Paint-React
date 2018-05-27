@@ -28,8 +28,6 @@ export default class ToolBar extends React.Component {
                 mode: 'brush',
             })
         }
-        console.log(this.state.click);
-
         this.props.mode(this.state.mode);
     }
 

@@ -15,12 +15,14 @@ export default class Header extends React.Component {
             <div className='nav-bar'>
               <ul className='nav-bar-list list'>
                 <li>
-                <a className='nav-bar-list-iteam'
-                  onClick={this.props.clearDrawingPlace}>OPEN</a>
+                <a className='nav-bar-list-iteam'>OPEN</a>
                 </li>
 
                 <li>
-                <a className='nav-bar-list-iteam'>CLEAR</a>
+                    <a className='nav-bar-list-iteam'
+                        onClick={this.props.clearDrawingPlace}>
+                        CLEAR
+                    </a>
                 </li>
 
                 <li>
