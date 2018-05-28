@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Component } from 'react';
-import { Stage, Layer, Image, Rect } from 'react-konva';
+import { Stage, Layer, Image, Rect, Group } from 'react-konva';
 import Konva from 'konva';
 import ToolBar from './Component/ToolBar.jsx';
 import Header from './Component/Header.jsx';
@@ -48,7 +48,12 @@ export default class App extends React.Component {
       isDrawing: true,
     });
 
-    const stage = this.image.parent.parent;
+    // const stage = this.image.parent.parent;
+    let stage = this.image.parent.parent;
+    if (this.image.parent.parent.nodeType !== 'Stage') {
+      stage = this.image.parent.parent.parent;
+    }
+
     this.lastPointerPosition = stage.getPointerPosition();
   }
 
@@ -77,7 +82,12 @@ export default class App extends React.Component {
     }
 
     context.moveTo(localPos.x, localPos.y);
-    const stage = this.image.parent.parent;
+    // const stage = this.image.parent.parent;
+    let stage = this.image.parent.parent;
+    if (this.image.parent.parent.nodeType !== 'Stage') {
+      stage = this.image.parent.parent.parent;
+    }
+
     let pos = stage.getPointerPosition();
 
     localPos = {
@@ -92,17 +102,23 @@ export default class App extends React.Component {
     this.image.getLayer().draw();
   }
 
+  clearAll = () => {
+    this.clearDrawingPlace();
+    this.imagee.getLayer().clear();
+  }
+
   clearDrawingPlace = () => {
     const {canvas, context} = this.state;
     const navBarIteam = document.querySelector('.nav-bar-list-iteam');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    this.imagee.getLayer().clear();
+    // this.imagee.getLayer().clear();
     this.image.getLayer().draw();
   }
 
   addImage = (e) => {
     const {canvas, context, image} = this.state;
     const el = document.getElementById('test');
+    this.clearDrawingPlace();
 
     if (el.files && el.files[0]) {
       var FR = new FileReader();
@@ -124,33 +140,47 @@ export default class App extends React.Component {
       FR.readAsDataURL(el.files[0]);
     };
   }
-    // const img = new window.Image();
-    // img.width = canvas.width;
-    // img.height = canvas.height;
-    // img.src = ruber;
-    // img.onload = () => {
-    //   this.setState({
-    //     image: img,
-    //   });
-    // };
+
+  //TODO: IMPROVE THIS TWO BUG WHEN DRAW SAVE AND LOAD NEW IMAGE !
+  downloadImg (uri, name) {
+    let link = document.createElement('a');
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  saveImg = () => {
+    // let group = new Konva.Group();
+    this.group.add(this.imagee);
+    this.group.add(this.image);
+    // const img = this.imagee.getLayer();
+    const stageURL = this.group.toDataURL('image/jpeg');
+    this.downloadImg(stageURL, 'img');
+    // this.group.removeChildren();
+  }
 
   render() {
     const {canvas, image} = this.state;
     return (
       <div className='app-wrapper wrapper'>
       
-        <Header clearDrawingPlace={this.clearDrawingPlace}/>
-        <input type='file' id='test' onChange={this.addImage}/>
+      <Header clearDrawingPlace={this.clearDrawingPlace}
+          addImage={this.addImage}
+          clearAll={this.clearAll}
+          saveImg={this.saveImg}/>
 
         <div className='app-body'>
           <Stage width={window.innerWidth} height={window.innerHeight}>
 
             <Layer>
+              <Group ref={node => {this.group = node}}></Group>
               <Image ref={node => {this.imagee = node}}
                   image={image}
                   x={window.innerWidth / 4}
                   y={window.innerHeight / 4}
-                  // fill={'black'}
+                  fill={'white'}
                 />
             </Layer>
 

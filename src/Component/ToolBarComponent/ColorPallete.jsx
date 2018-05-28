@@ -54,7 +54,14 @@ export default class ColorPallete extends React.Component {
     
     mouseMove = () => {
         const {context, canvas} = this.state;
-        const stage = this.image.parent.parent;
+        // const stage = this.image.parent.parent;
+
+        let stage = this.image.parent.parent;
+
+        if (this.image.parent.parent.nodeType !== 'Stage') {
+          stage = this.image.parent.parent.parent;
+        }
+
         this.lastPointerPosition = stage.getPointerPosition();
         
         let pos = {
