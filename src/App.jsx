@@ -22,10 +22,6 @@ export default class App extends React.Component {
     canvas.width = window.innerWidth / 2;
     canvas.height = window.innerHeight / 2;
     const context = canvas.getContext('2d');
-
-    // const te = document.getElementById('test');
-    // te.addEventListener('change', this.addImage, false);
-    
     this.setState({canvas, context});
   }
 
@@ -48,12 +44,7 @@ export default class App extends React.Component {
       isDrawing: true,
     });
 
-    // const stage = this.image.parent.parent;
-    let stage = this.image.parent.parent;
-    if (this.image.parent.parent.nodeType !== 'Stage') {
-      stage = this.image.parent.parent.parent;
-    }
-
+    const stage = this.image.parent.parent;
     this.lastPointerPosition = stage.getPointerPosition();
   }
 
@@ -82,12 +73,7 @@ export default class App extends React.Component {
     }
 
     context.moveTo(localPos.x, localPos.y);
-    // const stage = this.image.parent.parent;
-    let stage = this.image.parent.parent;
-    if (this.image.parent.parent.nodeType !== 'Stage') {
-      stage = this.image.parent.parent.parent;
-    }
-
+    const stage = this.image.parent.parent;
     let pos = stage.getPointerPosition();
 
     localPos = {
@@ -111,7 +97,6 @@ export default class App extends React.Component {
     const {canvas, context} = this.state;
     const navBarIteam = document.querySelector('.nav-bar-list-iteam');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    // this.imagee.getLayer().clear();
     this.image.getLayer().draw();
   }
 
@@ -127,21 +112,16 @@ export default class App extends React.Component {
         img.width = canvas.width;
         img.height = canvas.height;
         img.src = e.target.result;
-        // img.src = ruber;
         img.onload = () => {
           this.setState({
             image: img,
           });
-        // this.imagee.getLayer().add(this.imagee);
-        // // this.image.draw();
-        // this.imagee.getLayer().draw();
         };
       };
       FR.readAsDataURL(el.files[0]);
     };
   }
 
-  //TODO: IMPROVE THIS TWO BUG WHEN DRAW SAVE AND LOAD NEW IMAGE !
   downloadImg (uri, name) {
     let link = document.createElement('a');
     link.download = name;
@@ -152,13 +132,15 @@ export default class App extends React.Component {
   }
 
   saveImg = () => {
-    // let group = new Konva.Group();
-    this.group.add(this.imagee);
-    this.group.add(this.image);
-    // const img = this.imagee.getLayer();
-    const stageURL = this.group.toDataURL('image/jpeg');
+    let group = new Konva.Group();
+    group.add(this.imagee);
+    group.add(this.image);
+    this.layer.add(group);
+    const stageURL = group.toDataURL('image/jpeg');
     this.downloadImg(stageURL, 'img');
-    // this.group.removeChildren();
+    group.remove();
+    this.layer.add(this.image);
+    this.layerr.add(this.imagee);
   }
 
   render() {
@@ -174,8 +156,7 @@ export default class App extends React.Component {
         <div className='app-body'>
           <Stage width={window.innerWidth} height={window.innerHeight}>
 
-            <Layer>
-              <Group ref={node => {this.group = node}}></Group>
+            <Layer ref={node => {this.layerr = node}}>
               <Image ref={node => {this.imagee = node}}
                   image={image}
                   x={window.innerWidth / 4}
@@ -184,13 +165,12 @@ export default class App extends React.Component {
                 />
             </Layer>
 
-            <Layer>
+            <Layer ref={node => {this.layer = node}}>
               <Image ref={node => {this.image = node}}
                 image={canvas}
                 stroke={'blue'}
                 x={window.innerWidth / 4}
                 y={window.innerHeight / 4}
-                // fill={'black'}
                 onMouseDown={this.mouseDown.bind(this)}
                 onMouseUp={this.mouseUp.bind(this)} 
                 onMouseMove={this.mouseMove.bind(this)}

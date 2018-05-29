@@ -38,7 +38,6 @@ export default class ColorPallete extends React.Component {
                     context.drawImage(image, 0, 0, canvas.width, canvas.height);
                     
                     this.setState({
-                        // image: context.drawImage(image, 0, 0, 300, 300),
                         canvas, 
                         context
                     });
@@ -54,14 +53,7 @@ export default class ColorPallete extends React.Component {
     
     mouseMove = () => {
         const {context, canvas} = this.state;
-        // const stage = this.image.parent.parent;
-
-        let stage = this.image.parent.parent;
-
-        if (this.image.parent.parent.nodeType !== 'Stage') {
-          stage = this.image.parent.parent.parent;
-        }
-
+        const stage = this.image.parent.parent;
         this.lastPointerPosition = stage.getPointerPosition();
         
         let pos = {
@@ -75,7 +67,6 @@ export default class ColorPallete extends React.Component {
         this.setState({
             pixel: pixel,
         });
-        // this.image.getLayer().draw();
     }
     
     mosueClick = () => {
