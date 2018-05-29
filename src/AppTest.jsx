@@ -6,14 +6,15 @@ import ToolBar from './Component/ToolBar.jsx';
 import Header from './Component/Header.jsx';
 import ruber from './Image/ruber-white.png';
 
-export default class App extends React.Component {
+export default class AppTest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       mode: 'brush',
       isDrawing: false,
       color: '#df4b26',
-      image: null,  
+      image: null,
+      draggable: false,  
     };
   }
 
@@ -23,6 +24,7 @@ export default class App extends React.Component {
     canvas.height = window.innerHeight / 2;
     const context = canvas.getContext('2d');
     this.setState({canvas, context});
+    alert('TEST VERSION');
   }
 
   changeMode = (dataFromToolBar) => {
@@ -44,7 +46,7 @@ export default class App extends React.Component {
       isDrawing: true,
     });
 
-    const stage = this.image.parent.parent;
+    const stage = this.image.parent.parent.parent;
     this.lastPointerPosition = stage.getPointerPosition();
   }
 
@@ -66,19 +68,18 @@ export default class App extends React.Component {
     context.lineJoin = "round";
     context.lineWidth = 5;
     context.beginPath();
-
     let localPos = {
-      x: this.lastPointerPosition.x - this.image.x(),
-      y: this.lastPointerPosition.y - this.image.y(),
+      x: this.lastPointerPosition.x - this.image.x() - this.image.parent.x(),
+      y: this.lastPointerPosition.y - this.image.y() - this.image.parent.y(),
     }
 
     context.moveTo(localPos.x, localPos.y);
-    const stage = this.image.parent.parent;
+    const stage = this.image.parent.parent.parent;
     let pos = stage.getPointerPosition();
 
     localPos = {
-      x: pos.x - this.image.x(),
-      y: pos.y - this.image.y(),
+      x: pos.x - this.image.x() - this.image.parent.x(),
+      y: pos.y - this.image.y() - this.image.parent.y(),
     }
 
     context.lineTo(localPos.x, localPos.y);
@@ -148,16 +149,21 @@ export default class App extends React.Component {
   }
 
   saveImg = () => {
-    let group = new Konva.Group();
-    console.log(group.draggable());
-    group.add(this.imagee);
-    group.add(this.image);
-    this.layer.add(group);
-    const stageURL = group.toDataURL('image/png');
+    const stageURL = this.group.toDataURL('image/png');
     this.downloadImg(stageURL, 'img');
-    group.remove();
-    this.layer.add(this.image);
-    this.layerr.add(this.imagee);
+  }
+
+  draggDrawCanvas = (e) => {
+    console.log(this.image.parent.x());
+    if (e.target.className === 'Rect') {
+      this.setState({
+        draggable: true,
+      });
+    } else {
+      this.setState({
+        draggable: false,
+      });
+    }
   }
 
   render() {
@@ -173,32 +179,43 @@ export default class App extends React.Component {
         <div className='app-body'>
           <Stage width={window.innerWidth} height={window.innerHeight}>
 
-            <Layer ref={node => {this.layerr = node}}>
-              <Image ref={node => {this.imagee = node}}
+            <Layer>
+              <Group ref={node => {this.group = node}} draggable={this.state.draggable}>
+
+                <Rect width={window.innerWidth / 2} 
+                  height={window.innerHeight / 2} 
+                  x={window.innerWidth / 4}
+                  y={window.innerHeight / 4}
+                  strokeWidth={20}
+                  stroke={'black'}
+                  onMouseDown={this.draggDrawCanvas}
+                  onMouseUp={() => {this.setState({draggable: false})}}>
+                </Rect>
+
+                <Image ref={node => {this.imagee = node}}
                   image={image}
                   // fill={'white'}   
                   x={window.innerWidth / 4}
                   y={window.innerHeight / 4}
                 />
-            </Layer>
 
-            <Layer ref={node => {this.layer = node}}>
-              <Image ref={node => {this.image = node}}
-                image={canvas}
-                stroke={'blue'}
-                // fill={'white'}                
-                x={window.innerWidth / 4}
-                y={window.innerHeight / 4}
-                onMouseDown={this.mouseDown.bind(this)}
-                onMouseUp={this.mouseUp.bind(this)} 
-                onMouseMove={this.mouseMove.bind(this)}
-              />
+                <Image ref={node => {this.image = node}}
+                  image={canvas}
+                  // stroke={'blue'}
+                  x={window.innerWidth / 4}
+                  y={window.innerHeight / 4}
+                  onMouseDown={this.mouseDown.bind(this)}
+                  onMouseUp={this.mouseUp.bind(this)} 
+                  onMouseMove={this.mouseMove.bind(this)}
+                />
+
+              </Group>
             </Layer>
 
             <ToolBar mode={this.changeMode} 
               color={this.changeColor}
             />
-
+              
           </Stage>
         </div>
         
