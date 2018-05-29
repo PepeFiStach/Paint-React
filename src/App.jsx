@@ -13,7 +13,7 @@ export default class App extends React.Component {
       mode: 'brush',
       isDrawing: false,
       color: '#df4b26',
-      image: null,
+      image: null,  
     };
   }
 
@@ -89,8 +89,14 @@ export default class App extends React.Component {
   }
 
   clearAll = () => {
+    const {canvas, image} = this.state;
+    canvas.width = window.innerWidth / 2;
+    canvas.height = window.innerHeight / 2;
     this.clearDrawingPlace();
     this.imagee.getLayer().clear();
+    this.setState({
+      image: null,
+    })
   }
 
   clearDrawingPlace = () => {
@@ -101,10 +107,15 @@ export default class App extends React.Component {
   }
 
   addImage = (e) => {
-    const {canvas, context, image} = this.state;
+    const {canvas, image} = this.state;
     const el = document.getElementById('test');
     this.clearDrawingPlace();
 
+    /* INFO: BECAUSE I MUST UPDATE WIDTH AND HEIGHT CANVAS 
+             WITHOUT THIS I MUST CLICK AND THEN SIZE CHANGE */
+    const newCanvas = document.createElement('canvas');
+    const newContext = newCanvas.getContext('2d');
+    
     if (el.files && el.files[0]) {
       var FR = new FileReader();
       FR.onload = (e) => {
@@ -113,8 +124,12 @@ export default class App extends React.Component {
         img.height = canvas.height;
         img.src = e.target.result;
         img.onload = () => {
+          newCanvas.width = img.width;
+          newCanvas.height = img.height;
           this.setState({
             image: img,
+            canvas: newCanvas,
+            context: newContext,
           });
         };
       };
@@ -159,9 +174,9 @@ export default class App extends React.Component {
             <Layer ref={node => {this.layerr = node}}>
               <Image ref={node => {this.imagee = node}}
                   image={image}
+                  fill={'white'}   
                   x={window.innerWidth / 4}
                   y={window.innerHeight / 4}
-                  fill={'white'}
                 />
             </Layer>
 
@@ -169,6 +184,7 @@ export default class App extends React.Component {
               <Image ref={node => {this.image = node}}
                 image={canvas}
                 stroke={'blue'}
+                // fill={'white'}                
                 x={window.innerWidth / 4}
                 y={window.innerHeight / 4}
                 onMouseDown={this.mouseDown.bind(this)}

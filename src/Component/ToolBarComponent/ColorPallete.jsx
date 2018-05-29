@@ -27,13 +27,9 @@ export default class ColorPallete extends React.Component {
                 image.src = resp.url;
                 image.crossOrigin = "Anonymous";
 
-
-
                 context.fillStyle = 'grey';
                 context.fillRect(0 , 0, canvas.width, canvas.height);
 
-
-                
                 image.onload = () => {
                     context.drawImage(image, 0, 0, canvas.width, canvas.height);
                     
