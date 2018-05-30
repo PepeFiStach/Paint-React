@@ -15,6 +15,9 @@ export default class AppTest extends React.Component {
       color: '#df4b26',
       image: null,
       draggable: false,  
+      widthFrame: window.innerWidth / 2,
+      heightFrame: window.innerHeight / 2,
+      test: false,
     };
   }
 
@@ -24,7 +27,10 @@ export default class AppTest extends React.Component {
     canvas.height = window.innerHeight / 2;
     const context = canvas.getContext('2d');
     this.setState({canvas, context});
-    alert('TEST VERSION');
+
+    for (let i = 0; i < 20; i++) {
+      console.error('TEST VERSION' + i);
+    }
   }
 
   changeMode = (dataFromToolBar) => {
@@ -38,23 +44,48 @@ export default class AppTest extends React.Component {
   mouseUp() {
     this.setState({
       isDrawing: false,
+      test: false,
     });
+    console.log(this.state.test);
   }
 
   mouseDown() {
     this.setState({
       isDrawing: true,
+      test: true,
     });
+
+    console.log('down');
 
     const stage = this.image.parent.parent.parent;
     this.lastPointerPosition = stage.getPointerPosition();
   }
 
-  mouseMove() {
+  test = (e) => {
+    const {test} = this.state;
+    if (e.target.className === undefined) {
+      this.setState({
+        isDrawing: false,
+      });
+    }
+    // if (test === true) {
+    //   this.setState({
+    //     isDrawing: true,
+    //   });
+    // } else {
+    //   this.setState({
+    //     isDrawing: false,
+    //   })
+    // }
+  }
+
+  mouseMove(e) {
     const {context, isDrawing, mode} = this.state;
     if (!isDrawing) {
       return;
     }
+
+    console.log(e.target.className);
 
     if (mode === 'brush') {
       context.globalCompositeOperation = 'source-over';
@@ -97,6 +128,8 @@ export default class AppTest extends React.Component {
     this.imagee.getLayer().clear();
     this.setState({
       image: null,
+      widthFrame: window.innerWidth / 2,
+      heightFrame: window.innerHeight / 2,
     });
   }
 
@@ -121,8 +154,6 @@ export default class AppTest extends React.Component {
       var FR = new FileReader();
       FR.onload = () => {
         var img = new window.Image();
-        // img.width = canvas.width;
-        // img.height = canvas.height;
         img.src = FR.result;
         img.onload = () => {
           newCanvas.width = img.width;
@@ -131,6 +162,8 @@ export default class AppTest extends React.Component {
             image: img,
             canvas: newCanvas,
             context: newContext,
+            widthFrame: img.width,
+            heightFrame: img.height,
           });
         };
       };
@@ -154,7 +187,6 @@ export default class AppTest extends React.Component {
   }
 
   draggDrawCanvas = (e) => {
-    console.log(this.image.parent.x());
     if (e.target.className === 'Rect') {
       this.setState({
         draggable: true,
@@ -177,16 +209,16 @@ export default class AppTest extends React.Component {
           saveImg={this.saveImg}/>
 
         <div className='app-body'>
-          <Stage width={window.innerWidth} height={window.innerHeight}>
+          <Stage width={window.innerWidth} height={window.innerHeight} onMouseMove={this.test}>
 
             <Layer>
               <Group ref={node => {this.group = node}} draggable={this.state.draggable}>
 
-                <Rect width={window.innerWidth / 2} 
-                  height={window.innerHeight / 2} 
-                  x={window.innerWidth / 4}
-                  y={window.innerHeight / 4}
-                  strokeWidth={20}
+                <Rect width={this.state.widthFrame + 15} 
+                  height={this.state.heightFrame + 15} 
+                  x={(window.innerWidth / 4) - 8}
+                  y={(window.innerHeight / 4) - 8}
+                  strokeWidth={15} // for 10 is 11, 11, 5, 5 ; for 15 is 15, 15, 8, 8
                   stroke={'black'}
                   onMouseDown={this.draggDrawCanvas}
                   onMouseUp={() => {this.setState({draggable: false})}}>
@@ -201,7 +233,7 @@ export default class AppTest extends React.Component {
 
                 <Image ref={node => {this.image = node}}
                   image={canvas}
-                  // stroke={'blue'}
+                  // stroke={'yellow'}
                   x={window.innerWidth / 4}
                   y={window.innerHeight / 4}
                   onMouseDown={this.mouseDown.bind(this)}
