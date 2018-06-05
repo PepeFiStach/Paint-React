@@ -16,8 +16,15 @@ export default class Header extends React.Component {
               <ul className='nav-bar-list list'>
                 <li>
                     <a className='nav-bar-list-iteam nav-bar-new'
-                        onClick={this.props.clearAll}>
+                        onClick={this.props.add}>
                         NEW
+                    </a>
+                </li>
+
+                <li>
+                    <a className='nav-bar-list-iteam nav-bar-reset-all'
+                        onClick={this.props.clearAll}>
+                        RESET ALL
                     </a>
                 </li>
 

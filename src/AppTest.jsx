@@ -17,8 +17,9 @@ export default class AppTest extends React.Component {
       draggable: false,  
       widthFrame: window.innerWidth / 2,
       heightFrame: window.innerHeight / 2,
-      test: false,
+      isMouseOnCanvas: false,
       LAYERS: [],
+      s: false,
     };
   }
   
@@ -28,11 +29,19 @@ export default class AppTest extends React.Component {
     canvas.height = window.innerHeight / 2;
     const context = canvas.getContext('2d');
     this.setState({canvas, context});
+
+    this.image = new Konva.Image({
+      image: canvas,
+      x: window.innerWidth / 4,
+      y: window.innerHeight / 4,
+      stroke: 'black',
+      id: 'can'
+    });
     
     for (let i = 0; i < 5; i++) {
       console.error('TEST VERSION' + i);
     }
-    this.updateText();
+    // this.updateText();
     this.displayLayer();
   }
 
@@ -47,83 +56,123 @@ export default class AppTest extends React.Component {
   mouseUp() {
     this.setState({
       isDrawing: false,
-      test: false,
+      isMouseOnCanvas: false,
     });
-    console.log(this.state.test);
+  }
+
+  clickOnFirstLayer = (e) => {
+    const { LAYERS, canvas, s, context } = this.state;
+    const stageLayer = this.stage.getStage().children;
+    // const image = new Konva.Image({
+    //   image: canvas,
+    //   x: window.innerWidth / 4,
+    //   y: window.innerHeight / 4,
+    //   stroke: 'black',
+    //   id: 'can'
+    // });
+
+    LAYERS.forEach((layer, index) => {
+      if (layer.activeLayer === 'true') {
+        stageLayer.forEach((l, i) => {
+          if(l._id === layer.key) {  
+            const p = l.children;
+            p.forEach(ss => {
+              console.log(ss);
+              if(ss.id() === 'can') {
+                return;
+              }
+            });
+            l.add(this.image);
+            console.log(l);
+            // if (s === false) {
+            //   console.log('s');
+            //   l.add(image);
+            //   this.setState({
+            //     s: true,
+            //   })
+            // }              
+            // console.log(l);
+            // console.log(e.target);
+            this.image.on('mousedown', () => {
+              this.mouseDown();
+            })
+            this.image.on('mouseup', () => {
+              this.mouseUp();
+            })
+            this.image.on('mousemove', () => {
+              this.mouseMove();
+            })
+          }
+        })
+      }
+    });
+    this.stage.getStage().draw();
   }
 
   mouseDown() {
     this.setState({
       isDrawing: true,
-      test: true,
+      isMouseOnCanvas: true,
     });
-
-    console.log('down');
-
-    const stage = this.image.parent.parent.parent;
+    
+    const stage = this.image.parent.parent;
+    // const stage = this.image.parent.parent.parent;
     this.lastPointerPosition = stage.getPointerPosition();
   }
 
-  test = (e) => {
+  preventMouseOverCanvas = (e) => {
     const {test} = this.state;
     if (e.target.className === undefined) {
       this.setState({
         isDrawing: false,
       });
     }
-    // if (test === true) {
-    //   this.setState({
-    //     isDrawing: true,
-    //   });
-    // } else {
-    //   this.setState({
-    //     isDrawing: false,
-    //   })
-    // }
   }
 
-  mouseMove(e) {
-    const {context, isDrawing, mode} = this.state;
-    if (!isDrawing) {
-      return;
-    }
+  mouseMove() {
+    const { LAYERS } = this.state;
+    LAYERS.forEach((l, index) => {
+      if (l.activeLayer === 'true') {
+        const {context, isDrawing, mode} = this.state;
+        if (!isDrawing) {
+          return;
+        }
 
-    console.log(e.target.className);
+        if (mode === 'brush') {
+          context.globalCompositeOperation = 'source-over';
+        }
 
-    if (mode === 'brush') {
-      context.globalCompositeOperation = 'source-over';
-    }
+        if (mode === 'eraser') {
+          context.globalCompositeOperation = 'destination-out';
+        }
 
-    if (mode === 'eraser') {
-      context.globalCompositeOperation = 'destination-out';
-    }
+        context.strokeStyle = this.state.color;
+        context.lineJoin = "round";
+        context.lineWidth = 5;
+        context.beginPath();
+        let localPos = {
+          x: this.lastPointerPosition.x - this.image.x() - (this.image.parent.x()),
+          y: this.lastPointerPosition.y - this.image.y() - (this.image.parent.y()),
+        }
 
-    context.strokeStyle = this.state.color;
-    context.lineJoin = "round";
-    context.lineWidth = 5;
-    context.beginPath();
-    let localPos = {
-      x: this.lastPointerPosition.x - this.image.x() - (this.image.parent.x()),
-      y: this.lastPointerPosition.y - this.image.y() - (this.image.parent.y()),
-    }
-    console.log(localPos);
-    console.log(this.image.parent.x());
-    console.log(this.image.parent.scaleX());
+        context.moveTo(localPos.x, localPos.y);
+        const stage = this.image.parent.parent;
+        // const stage = this.image.parent.parent.parent;
+        let pos = stage.getPointerPosition();
 
-    context.moveTo(localPos.x, localPos.y);
-    const stage = this.image.parent.parent.parent;
-    let pos = stage.getPointerPosition();
+        localPos = {
+          x: pos.x - this.image.x() - (this.image.parent.x()),
+          y: pos.y - this.image.y() - (this.image.parent.y()),
+        }
 
-    localPos = {
-      x: pos.x - this.image.x() - (this.image.parent.x()),
-      y: pos.y - this.image.y() - (this.image.parent.y()),
-    }
-
-    context.lineTo(localPos.x, localPos.y);
-    context.closePath();
-    context.stroke();
-    this.lastPointerPosition = pos;
-    this.image.getLayer().draw();
+        context.lineTo(localPos.x, localPos.y);
+        context.closePath();
+        context.stroke();
+        this.lastPointerPosition = pos;
+        // this.image.getLayer().draw(); 
+        this.stage.getStage().draw();
+      }
+    });
   }
 
   clearAll = () => {
@@ -235,7 +284,6 @@ export default class AppTest extends React.Component {
   }
 
   addLayer = () => {
-      console.log(this.stage.getStage());
       let layer = new Konva.Layer();
       this.stage.getStage().add(layer);
       const { LAYERS } = this.state;
@@ -244,7 +292,8 @@ export default class AppTest extends React.Component {
           name: layer.nodeType,
           key: layer._id,
           activeLayer: 'false',
-      })
+      });
+
       this.setState({
           LAYERS: layerTMP,
       });
@@ -274,20 +323,13 @@ export default class AppTest extends React.Component {
     const stageLayer = this.stage.getStage().children;
 
     layerTMP.forEach((l, i) => {
-
-      stageLayer.forEach((layer, index) => {
-        // if(layer._id === 19) {
-        //   layer.getLayer().remove();
-        // }
-      });
-
       if (l.activeLayer === 'true') {
         stageLayer.forEach((layer, index) => {
           if(layer._id === l.key) {
-            console.log('asdasd');
             layer.getLayer().remove();
           }
         });
+
         layerTMP.splice(i, 1);
       }
     });
@@ -295,7 +337,6 @@ export default class AppTest extends React.Component {
     this.setState({
       LAYERS: layerTMP,
     });
-    console.log(stageLayer);
   }
 
   displayLayer = () => {
@@ -304,6 +345,10 @@ export default class AppTest extends React.Component {
       const stageLayer = this.stage.getStage().children;
       stageLayer.forEach((layer, index) => {
         // console.log(layer._id);
+        if (layer.id() === 'tool-bar') {
+          return;
+        }
+
           layerTMP.push({
               name: layer.nodeType,
               key: layer._id,
@@ -325,6 +370,7 @@ export default class AppTest extends React.Component {
           addImage={this.addImage}
           clearAll={this.clearAll}
           saveImg={this.saveImg}
+          clickOnFirstLayer={this.clickOnFirstLayer}
         />
 
         <div>
@@ -345,20 +391,24 @@ export default class AppTest extends React.Component {
         </div>
 
         <div className='app-body'>
-          <Stage width={window.innerWidth} height={window.innerHeight} onMouseMove={this.test}
+          <Stage width={window.innerWidth} height={window.innerHeight} onMouseMove={this.preventMouseOverCanvas}
             ref={node => { this.stage = node }}>
-
-            <Layer>
-              <Text x={100} y={100} ref={node => { this.text = node }}/>
+            <Layer 
+              onMouseDown={this.clickOnFirstLayer}
+              >
+              {/* <Rect width={50} height={50} fill={'black'}
+                            onMouseDown={this.clickOnFirstLayer}
+              ></Rect> */}
+              {/* <Text x={100} y={100} ref={node => { this.text = node }}/>
               <Rect width={20} height={20} fill={'pink'} x={300} onMouseDown={this.addResize}/>
               <Transformer ref={node => {this.transformer = node}} />
               <Group ref={node => {this.group = node}} 
                 draggable={this.state.draggable} 
                 onDragMove={this.updateText}
                 onTransform={this.updateText}
-              >
+              > */}
 
-                <Rect width={this.state.widthFrame + 15}
+                {/* <Rect width={this.state.widthFrame + 15}
                   height={this.state.heightFrame + 15}
                   x={(window.innerWidth / 4) - 8}
                   y={(window.innerHeight / 4) - 8}
@@ -374,19 +424,22 @@ export default class AppTest extends React.Component {
                   x={window.innerWidth / 4}
                   y={window.innerHeight / 4}
                   // draggable={true}
-                />
+                /> */}
 
-                <Image ref={node => { this.image = node }}
-                  image={canvas}
+                {/* <Image ref={node => { this.image = node }}
+                  // image={canvas}
                   stroke={'yellow'}
                   x={window.innerWidth / 4}
                   y={window.innerHeight / 4}
-                  onMouseDown={this.mouseDown.bind(this)}
-                  onMouseUp={this.mouseUp.bind(this)}
-                  onMouseMove={this.mouseMove.bind(this)}
-                />
+                  width={window.innerWidth / 2}
+                  height={window.innerHeight / 2}
+                  id={'start'}
+                  // onMouseDown={this.mouseDown.bind(this)}
+                  // onMouseUp={this.mouseUp.bind(this)}
+                  // onMouseMove={this.mouseMove.bind(this)}
+                /> */}
 
-              </Group>
+              {/* </Group> */}
             </Layer>
 
             <ToolBar mode={this.changeMode} 

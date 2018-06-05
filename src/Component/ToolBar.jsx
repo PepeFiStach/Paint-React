@@ -51,18 +51,18 @@ export default class ToolBar extends React.Component {
     }
 
     returnDragX = () => {
-        let tmp = this.refs.layer.x();
+        let tmp = this.toolBar.x();
         return tmp;
     }
 
     returnDragY = () => {
-        let tmp = this.refs.layer.y();
+        let tmp = this.toolBar.y();
         return tmp;
     }
 
     render() {
         return (
-            <Layer draggable={this.state.draggable} ref={'layer'}>
+            <Layer draggable={this.state.draggable} ref={node => {this.toolBar = node}} id={'tool-bar'}>
                 <Rect width={200} 
                     height={500} 
                     fill={'green'}
