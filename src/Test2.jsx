@@ -24,20 +24,6 @@ export default class AppTest extends React.Component {
     }
 
     componentDidMount() {
-        // const canvas = document.createElement('canvas');
-        // canvas.width = window.innerWidth / 2;
-        // canvas.height = window.innerHeight / 2;
-        // const context = canvas.getContext('2d');
-        // this.setState({canvas, context});
-
-        // this.image = new Konva.Image({
-        //   image: canvas,
-        //   x: window.innerWidth / 4,
-        //   y: window.innerHeight / 4,
-        //   stroke: 'black',
-        //   id: 'drawingPlace'
-        // });
-
         for (let i = 0; i < 5; i++) {
             console.error('TEST 2222222 VERSION' + i);
         }
@@ -81,10 +67,7 @@ export default class AppTest extends React.Component {
         });
 
         this.addLayer();
-        this.addLayer();
-        this.addDrawingCanvas();
         this.stage.getStage().draw();
-        console.log(this.stage.getStage());
     }
 
     addDrawingCanvas = () => {
@@ -133,55 +116,6 @@ export default class AppTest extends React.Component {
         this.stage.getStage().draw();
     }
 
-    //   clickOnFirstLayer = (e) => {
-    //     const { LAYERS, canvas, s, context } = this.state;
-    //     const stageLayer = this.stage.getStage().children;
-    //     // const image = new Konva.Image({
-    //     //   image: canvas,
-    //     //   x: window.innerWidth / 4,
-    //     //   y: window.innerHeight / 4,
-    //     //   stroke: 'black',
-    //     //   id: 'can'
-    //     // });
-
-    //     LAYERS.forEach((layer, index) => {
-    //       if (layer.activeLayer === 'true') {
-    //         stageLayer.forEach((l, i) => {
-    //           if(l._id === layer.key) {  
-    //             const p = l.children;
-    //             p.forEach(ss => {
-    //               console.log(ss);
-    //               if(ss.id() === 'can') {
-    //                 return;
-    //               }
-    //             });
-    //             l.add(this.image);
-    //             console.log(l);
-    //             // if (s === false) {
-    //             //   console.log('s');
-    //             //   l.add(image);
-    //             //   this.setState({
-    //             //     s: true,
-    //             //   })
-    //             // }              
-    //             // console.log(l);
-    //             // console.log(e.target);
-    //             this.image.on('mousedown', () => {
-    //               this.mouseDown();
-    //             })
-    //             this.image.on('mouseup', () => {
-    //               this.mouseUp();
-    //             })
-    //             this.image.on('mousemove', () => {
-    //               this.mouseMove();
-    //             })
-    //           }
-    //         })
-    //       }
-    //     });
-    //     this.stage.getStage().draw();
-    //   }
-
     mouseUp(img) {
         this.setState({
             isDrawing: false,
@@ -196,7 +130,6 @@ export default class AppTest extends React.Component {
         });
 
         const stage = img.parent.parent;
-        // const stage = this.image.parent.parent.parent;
         this.lastPointerPosition = stage.getPointerPosition();
     }
 
@@ -239,7 +172,6 @@ export default class AppTest extends React.Component {
 
                 context.moveTo(localPos.x, localPos.y);
                 const stage = img.parent.parent;
-                // const stage = this.image.parent.parent.parent;
                 let pos = stage.getPointerPosition();
 
                 localPos = {
@@ -251,7 +183,6 @@ export default class AppTest extends React.Component {
                 context.closePath();
                 context.stroke();
                 this.lastPointerPosition = pos;
-                // this.image.getLayer().draw(); 
                 this.stage.getStage().draw();
             }
         });
@@ -371,7 +302,6 @@ export default class AppTest extends React.Component {
             name: 'no',
         });
         this.stage.getStage().add(layer);
-        //   console.log(this.stage.getStage());
         const { LAYERS } = this.state;
         let layerTMP = LAYERS;
         layerTMP.push({
@@ -379,6 +309,7 @@ export default class AppTest extends React.Component {
             key: layer._id,
             activeLayer: 'false',
         });
+        this.addDrawingCanvas();
 
         this.setState({
             LAYERS: layerTMP,
@@ -404,9 +335,6 @@ export default class AppTest extends React.Component {
             if (e.target.id === layer._id.toString()) {
                 if (layer.name() === 'no') {
                     layer.name('yes');
-                    layer.moveToBottom();
-                } else {
-                    layer.name('no');
                     layer.moveToTop();
                 }
             }
@@ -417,37 +345,16 @@ export default class AppTest extends React.Component {
         });
     }
 
-    // removeLayer = (e) => {
-    //     const { LAYERS } = this.state;
-    //     let layerTMP = LAYERS;
-    //     const stageLayer = this.stage.getStage().children;
-
-    //     layerTMP.forEach((l, i) => {
-    //         if (l.activeLayer === 'true') {
-    //             stageLayer.forEach((layer, index) => {
-    //                 if (layer._id === l.key) {
-    //                     layer.getLayer().remove();
-    //                 }
-    //             });
-
-    //             layerTMP.splice(i, 1);
-    //         }
-    //     });
-
-    //     this.setState({
-    //         LAYERS: layerTMP,
-    //     });
-    // }
-
     removeLayer = (e) => {
         const { LAYERS } = this.state;
-        let layerTMP = LAYERS;
         const stageLayer = this.stage.getStage().children;
+        let layerTMP = LAYERS;
 
         layerTMP.forEach((l, i) => {
             if (l.activeLayer === 'true') {
                 stageLayer.forEach((layer, index) => {
                     if (layer._id === l.key) {
+                        console.log(layer);
                         layer.getLayer().remove();
                     }
                 });
@@ -455,16 +362,6 @@ export default class AppTest extends React.Component {
                 layerTMP.splice(i, 1);
             }
         });
-        // layerTMP.forEach((l, i) => {
-        //     stageLayer.forEach((layer, index) => {
-        //         if (layer.name() === 'yes') {
-        //             if (layer._id === l.key) {
-        //                 layer.getLayer().remove();
-        //             }
-        //         }
-        //         layerTMP.splice(i, 1);
-        //     });
-        // });
 
         this.setState({
             LAYERS: layerTMP,
@@ -476,7 +373,6 @@ export default class AppTest extends React.Component {
         let layerTMP = LAYERS;
         const stageLayer = this.stage.getStage().children;
         stageLayer.forEach((layer, index) => {
-            // console.log(layer._id);
             if (layer.id() === 'tool-bar') {
                 return;
             }
@@ -491,6 +387,10 @@ export default class AppTest extends React.Component {
         this.setState({
             LAYERS: layerTMP,
         });
+    }
+
+    targetEvent = (e) => {
+        console.log(e.target);
     }
 
     render() {
@@ -511,8 +411,15 @@ export default class AppTest extends React.Component {
                             this.state.LAYERS.map(layer => {
                                 return (
                                     <div>
-                                        <li key={layer.key}>{layer.name}{layer.key}{layer.activeLayer}</li>
-                                        <button id={layer.key} onMouseDown={this.clickLayer}>c</button>
+                                        <li key={layer.key}>
+                                            {layer.name}{layer.key}{layer.activeLayer}
+                                        </li>
+
+                                        <button id={layer.key} 
+                                        onMouseDown={this.clickLayer}
+                                        >
+                                            c
+                                        </button>
                                     </div>
                                 )
                             })
@@ -527,25 +434,8 @@ export default class AppTest extends React.Component {
                         height={window.innerHeight}
                         onMouseMove={this.preventMouseOverCanvas}
                         ref={node => { this.stage = node }}
+                        onMouseDown={this.targetEvent}
                     >
-
-                        {/* <Layer onMouseDown={this.clickOnFirstLayer}
-            ref={node => { this.l = node }}
-            id={'wwww'}
-            >
-                <Image ref={node => { this.image = node }}
-                  image={canvas}
-                  stroke={'yellow'}
-                  x={window.innerWidth / 4}
-                  y={window.innerHeight / 4}
-                //   width={window.innerWidth / 2}
-                //   height={window.innerHeight / 2}
-                  id={'start'}
-                  onMouseDown={this.mouseDown.bind(this)}
-                  onMouseUp={this.mouseUp.bind(this)}
-                  onMouseMove={this.mouseMove.bind(this)}
-                />
-            </Layer> */}
 
                         <ToolBar mode={this.changeMode}
                             color={this.changeColor}
@@ -558,7 +448,7 @@ export default class AppTest extends React.Component {
                 <div className='footer'>
                     <div className='footer-wrapper wrapper'>
                         Soon there will be a footer here !
-          </div>
+                    </div>
                 </div>
 
             </div>
