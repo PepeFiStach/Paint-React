@@ -1,3 +1,8 @@
+html, body {
+  margin: 0; 
+  height: 100%; 
+  overflow: hidden;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -26,4 +31,26 @@
   display: block;
   color: #fff;
   padding: 1em;
+}
+.canvas-options {
+  display: none;
+}
+.drawing-place {
+  float: left;
+  width: 70%;
+  background-color: #999;
+}
+.tool-bar {
+  float: left;
+  width: 15%;
+  background-color: bisque;
+}
+.options {
+  float: left;
+  width: 15%;
+  background-color: bisque;
+}
+.layer-management {
+  position: absolute;
+  z-index: 999;
 }

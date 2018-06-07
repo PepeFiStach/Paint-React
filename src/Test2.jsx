@@ -18,8 +18,8 @@ export default class AppTest extends React.Component {
             widthFrame: window.innerWidth / 2,
             heightFrame: window.innerHeight / 2,
             isMouseOnCanvas: false,
-            LAYERS: [],
-            isFocused: 'no',
+            layers: [],
+            newFile: false,
         };
     }
 
@@ -27,6 +27,10 @@ export default class AppTest extends React.Component {
         for (let i = 0; i < 5; i++) {
             console.error('TEST 2222222 VERSION' + i);
         }
+        this.scaleBy = 1.01;   
+        window.addEventListener('wheel', (e) => {
+            this.scroll(e);
+        });     
 
         // this.updateText();
         this.displayLayer();
@@ -40,41 +44,69 @@ export default class AppTest extends React.Component {
         this.setState({ color: dataFromToolBar });
     }
 
-    newFile = () => {
-        const { LAYERS } = this.state;
-        const stageLayer = this.stage.getStage().children;
-        let tmp = [];
-
-        stageLayer.forEach((layer, index) => {
-            if (layer.id() === 'newLayer') {
-                return;
-            }
-
-            tmp.push(layer);
-            this.stage.getStage().removeChildren();
-            tmp.forEach((lol, index) => {
-                this.stage.getStage().add(lol);
-            });
-        });
-
-        const LAYERS_TMP = LAYERS;
-        LAYERS_TMP.forEach((layer, index) => {
-            LAYERS_TMP.splice(index, LAYERS_TMP.length);
-        })
-
-        this.setState({
-            LAYERS: LAYERS_TMP,
-        });
-
-        this.addLayer();
-        this.stage.getStage().draw();
+    popCanvasOptions = () => {
+        const canvasOptions = document.querySelector('.canvas-options');
+        if (canvasOptions.style.display === 'block') {
+            canvasOptions.style.display = 'none';
+        } else {
+            canvasOptions.style.display = 'block';
+        }
     }
 
-    addDrawingCanvas = () => {
-        const { LAYERS } = this.state;
-        const stageLayer = this.stage.getStage().children;
+    newFile = () => {
+        // HERE WILL BE CODE FROM INPUT TAG TO CREATE WIDTH AND HEIGHT CANVAS
+        const canvasHeightOptions = document.querySelector('#canvas-height');
+        const canvasWidthOptions = document.querySelector('#canvas-width');
+        let newFileTMP = false;
 
-        LAYERS.forEach((layer, index) => {
+        if (canvasHeightOptions.value >= 32 && canvasWidthOptions.value >= 32
+            && !isNaN(canvasHeightOptions.value) && !isNaN(canvasWidthOptions.value)) {
+            const { layers, widthFrame, heightFrame, newFile } = this.state;
+
+            const stageLayer = this.stage.getStage().children;
+            let tmp = [];
+            newFileTMP = true;
+
+            // IF THE TOOL-BAR WAS IN THE SAME STAGE THEN UNCOMMENT THIS LINE
+            stageLayer.forEach((layer, index) => {
+                // if (layer.id() === 'newLayer') {
+                //     return;
+                // }
+                
+                // tmp.push(layer);
+                this.stage.getStage().removeChildren();
+                // tmp.forEach((saveLayer, index) => {
+                //     this.stage.getStage().add(saveLayer);
+                // });
+            });
+
+            const layers_TMP = layers;
+            layers_TMP.forEach((layer, index) => {
+                layers_TMP.splice(index, layers_TMP.length);
+            })
+
+            this.setState({
+                layers: layers_TMP,
+                widthFrame: canvasWidthOptions.value,
+                heightFrame: canvasHeightOptions.value,
+                newFile: true,
+            });
+
+            this.addLayer(canvasWidthOptions.value, canvasHeightOptions.value, newFileTMP);
+            this.popCanvasOptions();
+            this.stage.getStage().draw();
+        } else {
+            newFileTMP = false;
+            alert('WIDTH AND HEIGHT MUST BE A NUMBER AND BIGER THEN 32PX');
+        }
+    }
+
+    addDrawingCanvas = (width, height) => {
+        const { layers } = this.state;
+        const stageLayer = this.stage.getStage().children;
+        console.log(width, height);
+
+        layers.forEach((layer, index) => {
             stageLayer.forEach((l, i) => {
                 if (l._id === layer.key) {
                     const lChildren = l.children;
@@ -85,15 +117,14 @@ export default class AppTest extends React.Component {
                     });
 
                     const canvas = document.createElement('canvas');
-                    canvas.width = window.innerWidth / 2;
-                    canvas.height = window.innerHeight / 2;
+                    canvas.width = width;
+                    canvas.height = height;
                     const context = canvas.getContext('2d');
                     this.setState({ canvas, context });
-
                     const img = new Konva.Image({
                         image: canvas,
-                        x: window.innerWidth / 4,
-                        y: window.innerHeight / 4,
+                        x: 0,
+                        y: 0,
                         stroke: 'black',
                         id: 'drawingPlace'
                     });
@@ -101,7 +132,6 @@ export default class AppTest extends React.Component {
                     l.add(img);
 
                     img.on('mousedown', (e) => {
-                        console.log(e.target);
                         this.mouseDown(img);
                     });
                     img.on('mouseup', () => {
@@ -143,12 +173,13 @@ export default class AppTest extends React.Component {
     }
 
     mouseMove(img, canvas, context) {
-        const { LAYERS } = this.state;
+        const { layers } = this.state;
         const stageLayer = this.stage.getStage().children;
 
-        LAYERS.forEach((l, index) => {
+        layers.forEach((l, index) => {
             if (l.activeLayer === 'true') {
                 const { isDrawing, mode } = this.state;
+                const stage = this.stage.getStage();
                 if (!isDrawing) {
                     return;
                 }
@@ -165,18 +196,36 @@ export default class AppTest extends React.Component {
                 context.lineJoin = "round";
                 context.lineWidth = 5;
                 context.beginPath();
+                // img = shape, img.parent = layer
                 let localPos = {
-                    x: this.lastPointerPosition.x - img.x() - (img.parent.x()),
-                    y: this.lastPointerPosition.y - img.y() - (img.parent.y()),
+                    x: (this.lastPointerPosition.x 
+                        - img.x() 
+                        - img.parent.x() 
+                        - stage.x()) 
+                        / stage.scaleX(),
+
+                    y: (this.lastPointerPosition.y 
+                        - img.y() 
+                        - img.parent.y() 
+                        - stage.y()) 
+                        / stage.scaleY(),
                 }
 
                 context.moveTo(localPos.x, localPos.y);
-                const stage = img.parent.parent;
                 let pos = stage.getPointerPosition();
 
                 localPos = {
-                    x: pos.x - img.x() - (img.parent.x()),
-                    y: pos.y - img.y() - (img.parent.y()),
+                    x: (pos.x 
+                        - img.x() 
+                        - img.parent.x() 
+                        - stage.x()) 
+                        / stage.scaleX(),
+
+                    y: (pos.y 
+                        - img.y() 
+                        - img.parent.y() 
+                        - stage.y()) 
+                        / stage.scaleY(),
                 }
 
                 context.lineTo(localPos.x, localPos.y);
@@ -296,30 +345,39 @@ export default class AppTest extends React.Component {
         this.text.getLayer().batchDraw();
     }
 
-    addLayer = () => {
-        let layer = new Konva.Layer({
-            id: 'newLayer',
-            name: 'no',
-        });
-        this.stage.getStage().add(layer);
-        const { LAYERS } = this.state;
-        let layerTMP = LAYERS;
-        layerTMP.push({
-            name: layer.nodeType,
-            key: layer._id,
-            activeLayer: 'false',
-        });
-        this.addDrawingCanvas();
-
-        this.setState({
-            LAYERS: layerTMP,
-        });
+    addLayer = (width, height, newFileTMP) => {
+        const { newFile } = this.state;
+        if (newFileTMP === true || newFile === true) {
+            let layer = new Konva.Layer({
+                id: 'newLayer',
+                name: 'no',
+            });
+            this.stage.getStage().add(layer);
+            const { layers, widthFrame, heightFrame } = this.state;
+    
+            if (height === undefined) {
+                width = widthFrame;
+                height = heightFrame;
+            }
+            let layerTMP = layers;
+            layerTMP.push({
+                name: layer.nodeType,
+                key: layer._id,
+                activeLayer: 'false',
+            });
+            this.addDrawingCanvas(width, height);
+            this.setState({
+                layers: layerTMP,
+            });
+        } else {
+            alert('YOU MUST CREATE NEW FILE FIRST');
+        }
     }
 
     clickLayer = (e) => {
-        const { LAYERS } = this.state;
+        const { layers } = this.state;
         const stageLayer = this.stage.getStage().children;
-        let layerTMP = LAYERS;
+        let layerTMP = layers;
 
         layerTMP.forEach((l, i) => {
             if (e.target.id === l.key.toString()) {
@@ -331,6 +389,7 @@ export default class AppTest extends React.Component {
                 }
             }
         });
+        // WHEN I DELETE LAYER, CLICKED LAYER IS CORRECT
         stageLayer.forEach(layer => {
             if (e.target.id === layer._id.toString()) {
                 if (layer.name() === 'no') {
@@ -341,17 +400,18 @@ export default class AppTest extends React.Component {
         });
 
         this.setState({
-            LAYERS: layerTMP,
+            layers: layerTMP,
         });
     }
 
     removeLayer = (e) => {
-        const { LAYERS } = this.state;
+        const { layers } = this.state;
         const stageLayer = this.stage.getStage().children;
-        let layerTMP = LAYERS;
+        let layerTMP = layers;
 
         layerTMP.forEach((l, i) => {
             if (l.activeLayer === 'true') {
+                console.log('remove');
                 stageLayer.forEach((layer, index) => {
                     if (layer._id === l.key) {
                         console.log(layer);
@@ -364,13 +424,13 @@ export default class AppTest extends React.Component {
         });
 
         this.setState({
-            LAYERS: layerTMP,
+            layers: layerTMP,
         });
     }
 
     displayLayer = () => {
-        const { LAYERS } = this.state;
-        let layerTMP = LAYERS;
+        const { layers } = this.state;
+        let layerTMP = layers;
         const stageLayer = this.stage.getStage().children;
         stageLayer.forEach((layer, index) => {
             if (layer.id() === 'tool-bar') {
@@ -385,8 +445,32 @@ export default class AppTest extends React.Component {
         });
 
         this.setState({
-            LAYERS: layerTMP,
+            layers: layerTMP,
         });
+    }
+
+    scroll = (e) => {
+        const stage = this.stage.getStage();
+        var oldScale = stage.scaleX();
+        // console.log(e.target);
+
+        if (stage.x() == undefined) {
+            console.log('ss');
+        }
+        var mousePointTo = {
+            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale,
+        };
+
+        var newScale = e.deltaY < 0 ? oldScale * this.scaleBy : oldScale / this.scaleBy;
+        stage.scale({ x: newScale, y: newScale });
+
+        var newPos = {
+            x: -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale,
+            y: -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale
+        };
+        stage.position(newPos);
+        stage.draw();
     }
 
     targetEvent = (e) => {
@@ -403,22 +487,23 @@ export default class AppTest extends React.Component {
                     clearAll={this.clearAll}
                     saveImg={this.saveImg}
                     add={this.newFile}
+                    popCanvasOptions={this.popCanvasOptions}
                 />
 
-                <div>
+                <div className='layer-management'>
                     <ul>
                         {
-                            this.state.LAYERS.map(layer => {
+                            this.state.layers.map(layer => {
                                 return (
                                     <div>
                                         <li key={layer.key}>
                                             {layer.name}{layer.key}{layer.activeLayer}
                                         </li>
 
-                                        <button id={layer.key} 
-                                        onMouseDown={this.clickLayer}
+                                        <button id={layer.key}
+                                            onMouseDown={this.clickLayer}
                                         >
-                                            c
+                                            o
                                         </button>
                                     </div>
                                 )
@@ -430,11 +515,10 @@ export default class AppTest extends React.Component {
                 </div>
 
                 <div className='app-body'>
-                    <Stage width={window.innerWidth}
+
+                    <Stage className='tool-bar stage'
+                        width={window.innerWidth}
                         height={window.innerHeight}
-                        onMouseMove={this.preventMouseOverCanvas}
-                        ref={node => { this.stage = node }}
-                        onMouseDown={this.targetEvent}
                     >
 
                         <ToolBar mode={this.changeMode}
@@ -443,6 +527,24 @@ export default class AppTest extends React.Component {
                         />
 
                     </Stage>
+
+                    <Stage className={'drawing-place stage'}
+                        width={window.innerWidth * 0.7}
+                        height={window.innerHeight}
+                        onMouseMove={this.preventMouseOverCanvas}
+                        ref={node => { this.stage = node }}
+                        // onMouseDown={this.targetEvent}
+                    >
+
+                    </Stage>
+
+                    <Stage width={window.innerWidth}
+                        height={window.innerHeight}
+                        className={'options stage'}
+                    >
+
+                    </Stage>
+
                 </div>
 
                 <div className='footer'>

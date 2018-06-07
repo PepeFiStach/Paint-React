@@ -16,14 +16,36 @@ export default class Header extends React.Component {
               <ul className='nav-bar-list list'>
                 <li>
                     <a className='nav-bar-list-iteam nav-bar-new'
-                        onClick={this.props.add}>
+                        onClick={this.props.popCanvasOptions}>
                         NEW
                     </a>
+                    <div className='canvas-options'>
+                            <label htmlFor='canvas-width'>
+                                width
+                            </label>
+
+                            <input id='canvas-width' 
+                                className='canvas-options-input' >
+                            </input>
+
+                            <label htmlFor='canvas-height'>
+                                height
+                            </label>
+                            
+                            <input id='canvas-height'
+                                className='canvas-options-input'>
+                            </input>
+                            <button className='canvas-otpions-btn'
+                                onClick={this.props.add}>
+                                CREATE CANVAS
+                            </button>
+                        </div>
                 </li>
 
                 <li>
                     <a className='nav-bar-list-iteam nav-bar-reset-all'
-                        onClick={this.props.clearAll}>
+                        onClick={this.props.clearAll}
+                    >
                         RESET ALL
                     </a>
                 </li>
