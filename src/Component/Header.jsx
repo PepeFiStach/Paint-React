@@ -8,71 +8,69 @@ export default class Header extends React.Component {
     componentDidMount() {
     }
 
+    exitCanvasOptions = () => {
+        this.props.popCanvasOptions();
+    }
+
     render() {
         return (
-        <div className='header'>
-          <div className='header-wrapper wrapper'>
-            <div className='nav-bar'>
-              <ul className='nav-bar-list list'>
-                <li>
-                    <a className='nav-bar-list-iteam nav-bar-new'
-                        onClick={this.props.popCanvasOptions}>
+              <ul className='nav-bar'>
+                <li className='nav-bar-iteam logo'>
+                    <a>LOGO</a>
+                </li>
+                <li className='nav-bar-iteam'>
+                    <a onClick={this.props.popCanvasOptions}>
                         NEW
                     </a>
-                    <div className='canvas-options'>
+                    <ul className='canvas-options'>
+                        <li>
+                            <span className='canvas-options-exit'
+                                onMouseDown={this.props.popCanvasOptions}>
+                                X
+                            </span>
+                        </li>
+                        <li>
                             <label htmlFor='canvas-width'>
-                                width
+                                WIDTH (in pxl)
                             </label>
 
-                            <input id='canvas-width' 
+                            <input id='canvas-width'
                                 className='canvas-options-input' >
                             </input>
+                        </li>
 
+                        <li>
                             <label htmlFor='canvas-height'>
-                                height
+                                HEIGHT (in pxl)
                             </label>
-                            
+
                             <input id='canvas-height'
                                 className='canvas-options-input'>
                             </input>
+                        </li>
+
+                        <li>
                             <button className='canvas-otpions-btn'
                                 onClick={this.props.add}>
                                 CREATE CANVAS
                             </button>
-                        </div>
+                        </li>
+                    </ul>
                 </li>
 
-                <li>
-                    <a className='nav-bar-list-iteam nav-bar-reset-all'
-                        onClick={this.props.clearAll}
-                    >
-                        RESET ALL
+                <li className='nav-bar-iteam'>
+                    <a>
+                        <input type='file' name='add-image' id='add-image' onChange={this.props.addImage}/>
+                        <label htmlFor='add-image' >Add image</label>
                     </a>
                 </li>
 
-                <li>
-                    <a className='nav-bar-list-iteam nav-bar-open'>
-                        <input type='file' id='test' onChange={this.props.addImage}/>
-                    </a>
-                </li>
-
-                <li>
-                    <a className='nav-bar-list-iteam nav-bar-clear'
-                        onClick={this.props.clearDrawingPlace}>
-                        CLEAR
-                    </a>
-                </li>
-
-                <li>
-                    <a className='nav-bar-list-iteam'
-                        onClick={this.props.saveImg}>
+                <li className='nav-bar-iteam'>
+                    <a onClick={this.props.saveImg}>
                         SAVE
                     </a>
                 </li>
               </ul>
-            </div>
-          </div>
-        </div>
         )
     }
 }

@@ -1,0 +1,171 @@
+import React from 'react';
+import text from '../../Image/pencil.jpg';
+import Konva from 'konva';
+import textWhite from '../../Image/pencil-white.png';
+import Mouse from '../../Functionality/Mouse';
+
+export default class Text extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            image: null,
+            stateClick: false,
+            mode: 'text',
+            name: 'text',
+        };
+
+        this.Mouse = new Mouse();
+    }
+
+    componentDidMount() {
+        const image = new window.Image();
+        image.src = text;
+        image.width = 32;
+        image.height = 32;
+        image.onload = () => {
+            this.setState({
+                image: image,
+            });
+        };
+    }
+
+    off = () => {
+        const image = new window.Image();
+        image.width = 32;
+        image.height = 32;
+        image.src = text;
+        this.state.mode = 'no-text';
+        this.state.stateClick = false;
+        image.onload = () => {
+            this.setState({
+                image: image,
+                stateClick: false,
+                mode: 'no-text',
+            });
+        };
+    }
+
+    createTextArea = (canvas, _stageLayers, drawingPlace, stage) => {
+        const textNode = new Konva.Text({
+            id: 'text',
+            fontSize: 20,
+        });
+
+        const group = new Konva.Group({
+            id: 'group',
+        });
+
+        group.add(textNode);
+        _stageLayers.add(group);
+        // console.log(_stageLayers);
+
+        textNode.on('dblclick', () => {
+            // create textarea over canvas with absolute position
+
+            // first we need to find its positon
+            var textPosition = textNode.getAbsolutePosition();
+            var stageBox = stage.getContainer().getBoundingClientRect();
+
+            var areaPosition = {
+                x: textPosition.x + stageBox.left,
+                y: textPosition.y + stageBox.top
+            };
+
+
+            // create textarea and style it
+            var textarea = document.createElement('textarea');
+            document.body.appendChild(textarea);
+
+            textarea.value = textNode.text();
+            textarea.style.position = 'absolute';
+            textarea.style.top = areaPosition.y + 'px';
+            textarea.style.left = areaPosition.x + 'px';
+            textarea.style.width = textNode.width();
+
+            textarea.focus();
+
+
+            textarea.addEventListener('keydown', function (e) {
+                // hide on enter
+                if (e.keyCode === 13) {
+                    textNode.text(textarea.value);
+                    stage.draw();
+                    document.body.removeChild(textarea);
+                }
+            });
+        });
+    }
+
+    mouseClick = () => {
+        const { stateClick } = this.state;
+        this.props.offAllButtons();
+        const elMove = document.querySelector('.text-img');
+        if (!stateClick) {
+            const image = new window.Image();
+            image.width = 32;
+            image.height = 32;
+            image.src = textWhite;
+            this.state.mode = 'text';
+            elMove.id = 'text-id';
+            this.state.stateClick = true;
+            this.props.changeText('on');
+            image.onload = () => {
+                this.setState({
+                    image: image,
+                    stateClick: true,
+                    mode: 'text',
+                });
+            };
+        } else {
+            const image = new window.Image();
+            image.width = 32;
+            image.height = 32;
+            image.src = text;
+            this.state.mode = 'no-text';
+            elMove.removeAttribute('id');
+            this.state.stateClick = false;
+            this.props.changeText('off');
+            image.onload = () => {
+                this.setState({
+                    image: image,
+                    stateClick: false,
+                    mode: 'no-text',
+                });
+            };
+        }
+
+        this.props.changeMode(this.state.mode);
+    }
+
+    render() {
+        const { image } = this.state;
+        let img;
+
+        if (image === null)
+            img = <img
+                ref={node => { this.text = node }}
+                className={'text'}
+            />;
+        else
+            img = <div className={'text'}
+                onMouseMove={() => { this.Mouse.dragLayerManagement('.text') }}
+                onClick={this.mouseClick}>
+                <img src={image.src}
+                    width={image.width}
+                    height={image.height}
+                    className={'text-img'}
+                />
+                <div className='text-resize'
+                    onMouseMove={() => {
+                        this.Mouse.resizeElement('.text-resize', '.text')
+                    }}>
+                </div>
+            </div>
+
+        return (
+            <div>
+                {img}
+            </div>
+        )
+    }
+}

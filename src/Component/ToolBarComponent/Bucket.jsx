@@ -1,24 +1,24 @@
 import React from 'react';
-import ruber from '../../Image/ruber.png';
-import ruberWhite from '../../Image/ruber-white.png';
+import bucket from '../../Image/ruber.png';
+import bucketWhite from '../../Image/ruber-white.png';
 import Mouse from '../../Functionality/Mouse';
 
-export default class Eraser extends React.Component {
+export default class Bucket extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             image: null,
             stateClick: false,
-            mode: 'eraser',
-            name: 'eraser',
+            mode: 'bucket',
+            name: 'bucket',
         };
 
         this.Mouse = new Mouse();
     }
-    
+
     componentDidMount() {
         const image = new window.Image();
-        image.src = ruber;
+        image.src = bucket;
         image.width = 32;
         image.height = 32;
         image.onload = () => {
@@ -32,14 +32,14 @@ export default class Eraser extends React.Component {
         const image = new window.Image();
         image.width = 32;
         image.height = 32;
-        image.src = ruber;
-        this.state.mode = 'no-eraser';
+        image.src = bucket;
+        this.state.mode = 'no-bucket';
         this.state.stateClick = false;
         image.onload = () => {
             this.setState({
                 image: image,
                 stateClick: false,
-                mode: 'no-eraser',
+                mode: 'no-bucket',
             });
         };
     }
@@ -47,39 +47,39 @@ export default class Eraser extends React.Component {
     mouseClick = () => {
         const { stateClick } = this.state;
         this.props.offAllButtons();
-        const elMove = document.querySelector('.eraser-img');
+        const elMove = document.querySelector('.bucket-img');
         if (!stateClick) {
             const image = new window.Image();
             image.width = 32;
             image.height = 32;
-            image.src = ruberWhite;
-            this.state.mode = 'eraser';
-            elMove.id = 'eraser-id';
+            image.src = bucketWhite;
+            this.state.mode = 'bucket';
+            elMove.id = 'bucket-id';
             this.state.stateClick = true;
             image.onload = () => {
                 this.setState({
                     image: image,
                     stateClick: true,
-                    mode: 'eraser',
+                    mode: 'bucket',
                 });
             };
         } else {
             const image = new window.Image();
             image.width = 32;
             image.height = 32;
-            image.src = ruber;
-            this.state.mode = 'no-eraser';
+            image.src = bucket;
+            this.state.mode = 'no-bucket';
             elMove.removeAttribute('id');
             this.state.stateClick = false;
             image.onload = () => {
                 this.setState({
                     image: image,
                     stateClick: false,
-                    mode: 'no-eraser',
+                    mode: 'no-bucket',
                 });
             };
         }
-        
+
         this.props.changeMode(this.state.mode);
     }
 
@@ -90,22 +90,22 @@ export default class Eraser extends React.Component {
         if (image === null)
             img = <img />;
         else {
-            img = <div className={'eraser'}
-                    onMouseMove={() => { this.Mouse.dragLayerManagement('.eraser') }}
-                    onClick={this.mouseClick}>
-                        <img src={image.src}
-                            width={image.width}
-                            height={image.height}
-                            className={'eraser-img'}
-                        />
-                        <div className='eraser-resize'
-                            onMouseMove={() => { 
-                                this.Mouse.resizeElement('.eraser-resize', '.eraser')
-                            }}>
-                        </div>
+            img = <div className={'bucket'}
+                onMouseMove={() => { this.Mouse.dragLayerManagement('.bucket') }}
+                onClick={this.mouseClick}>
+                <img src={image.src}
+                    width={image.width}
+                    height={image.height}
+                    className={'bucket-img'}
+                />
+                <div className='bucket-resize'
+                    onMouseMove={() => {
+                        this.Mouse.resizeElement('.bucket-resize', '.bucket')
+                    }}>
                 </div>
+            </div>
         }
-        
+
         return (
             <div>
                 {img}

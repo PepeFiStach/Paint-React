@@ -1,24 +1,25 @@
 import React from 'react';
-import ruber from '../../Image/ruber.png';
-import ruberWhite from '../../Image/ruber-white.png';
+import filter from '../../Image/move.jpg';
+import filterWhite from '../../Image/move-white.jpg';
 import Mouse from '../../Functionality/Mouse';
 
-export default class Eraser extends React.Component {
+export default class Filter extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             image: null,
             stateClick: false,
-            mode: 'eraser',
-            name: 'eraser',
+            mode: 'filter',
+            name: 'filter',
         };
 
         this.Mouse = new Mouse();
     }
-    
+
     componentDidMount() {
         const image = new window.Image();
-        image.src = ruber;
+        image.src = filter;
         image.width = 32;
         image.height = 32;
         image.onload = () => {
@@ -32,14 +33,14 @@ export default class Eraser extends React.Component {
         const image = new window.Image();
         image.width = 32;
         image.height = 32;
-        image.src = ruber;
-        this.state.mode = 'no-eraser';
+        image.src = filter;
+        this.state.mode = 'no-filter';
         this.state.stateClick = false;
         image.onload = () => {
             this.setState({
                 image: image,
                 stateClick: false,
-                mode: 'no-eraser',
+                mode: 'no-filter',
             });
         };
     }
@@ -47,39 +48,39 @@ export default class Eraser extends React.Component {
     mouseClick = () => {
         const { stateClick } = this.state;
         this.props.offAllButtons();
-        const elMove = document.querySelector('.eraser-img');
+        const elMove = document.querySelector('.filter-img');
         if (!stateClick) {
             const image = new window.Image();
             image.width = 32;
             image.height = 32;
-            image.src = ruberWhite;
-            this.state.mode = 'eraser';
-            elMove.id = 'eraser-id';
+            image.src = filterWhite;
+            this.state.mode = 'filter';
+            elMove.id = 'filter-id';
             this.state.stateClick = true;
             image.onload = () => {
                 this.setState({
                     image: image,
                     stateClick: true,
-                    mode: 'eraser',
+                    mode: 'filter',
                 });
             };
         } else {
             const image = new window.Image();
             image.width = 32;
             image.height = 32;
-            image.src = ruber;
-            this.state.mode = 'no-eraser';
+            image.src = filter;
+            this.state.mode = 'no-filter';
             elMove.removeAttribute('id');
             this.state.stateClick = false;
             image.onload = () => {
                 this.setState({
                     image: image,
                     stateClick: false,
-                    mode: 'no-eraser',
+                    mode: 'no-filter',
                 });
             };
         }
-        
+
         this.props.changeMode(this.state.mode);
     }
 
@@ -89,27 +90,26 @@ export default class Eraser extends React.Component {
 
         if (image === null)
             img = <img />;
-        else {
-            img = <div className={'eraser'}
-                    onMouseMove={() => { this.Mouse.dragLayerManagement('.eraser') }}
+        else
+            img = <div className={'filter'}
+                    onMouseMove={() => { this.Mouse.dragLayerManagement('.filter') }}
                     onClick={this.mouseClick}>
                         <img src={image.src}
                             width={image.width}
                             height={image.height}
-                            className={'eraser-img'}
+                            className={'filter-img'}
                         />
-                        <div className='eraser-resize'
-                            onMouseMove={() => { 
-                                this.Mouse.resizeElement('.eraser-resize', '.eraser')
-                            }}>
-                        </div>
+                <div className='filter-resize'
+                    onMouseMove={() => { 
+                        this.Mouse.resizeElement('.filter-resize', '.filter') 
+                    }}>
                 </div>
-        }
-        
+            </div>
+
         return (
             <div>
                 {img}
             </div>
         )
     }
-} 
+}

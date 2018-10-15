@@ -1,16 +1,16 @@
 import React from 'react';
-import ruber from '../../Image/ruber.png';
-import ruberWhite from '../../Image/ruber-white.png';
+import move from '../../Image/move.jpg';
+import moveWhite from '../../Image/move-white.jpg';
 import Mouse from '../../Functionality/Mouse';
 
-export default class Eraser extends React.Component {
+export default class Move extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             image: null,
             stateClick: false,
-            mode: 'eraser',
-            name: 'eraser',
+            mode: 'move',
+            name: 'move',
         };
 
         this.Mouse = new Mouse();
@@ -18,7 +18,7 @@ export default class Eraser extends React.Component {
     
     componentDidMount() {
         const image = new window.Image();
-        image.src = ruber;
+        image.src = move;
         image.width = 32;
         image.height = 32;
         image.onload = () => {
@@ -32,54 +32,55 @@ export default class Eraser extends React.Component {
         const image = new window.Image();
         image.width = 32;
         image.height = 32;
-        image.src = ruber;
-        this.state.mode = 'no-eraser';
+        image.src = move;
+        this.state.mode = 'no-move';
         this.state.stateClick = false;
         image.onload = () => {
             this.setState({
                 image: image,
                 stateClick: false,
-                mode: 'no-eraser',
+                mode: 'no-move',
             });
         };
     }
 
     mouseClick = () => {
-        const { stateClick } = this.state;
+        const {stateClick} = this.state;
         this.props.offAllButtons();
-        const elMove = document.querySelector('.eraser-img');
+        const elMove = document.querySelector('.move-img');
+
         if (!stateClick) {
             const image = new window.Image();
             image.width = 32;
             image.height = 32;
-            image.src = ruberWhite;
-            this.state.mode = 'eraser';
-            elMove.id = 'eraser-id';
+            image.src = moveWhite;
+            this.state.mode = 'move';
+            elMove.id = 'move-id';
             this.state.stateClick = true;
             image.onload = () => {
                 this.setState({
                     image: image,
                     stateClick: true,
-                    mode: 'eraser',
+                    mode: 'move',
                 });
             };
         } else {
             const image = new window.Image();
             image.width = 32;
             image.height = 32;
-            image.src = ruber;
-            this.state.mode = 'no-eraser';
+            image.src = move;
+            this.state.mode = 'no-move';
             elMove.removeAttribute('id');
             this.state.stateClick = false;
             image.onload = () => {
                 this.setState({
                     image: image,
                     stateClick: false,
-                    mode: 'no-eraser',
+                    mode: 'no-move',
                 });
             };
         }
-        
+
         this.props.changeMode(this.state.mode);
     }
 
@@ -88,28 +89,30 @@ export default class Eraser extends React.Component {
         let img;
 
         if (image === null)
-            img = <img />;
-        else {
-            img = <div className={'eraser'}
-                    onMouseMove={() => { this.Mouse.dragLayerManagement('.eraser') }}
-                    onClick={this.mouseClick}>
-                        <img src={image.src}
-                            width={image.width}
-                            height={image.height}
-                            className={'eraser-img'}
-                        />
-                        <div className='eraser-resize'
-                            onMouseMove={() => { 
-                                this.Mouse.resizeElement('.eraser-resize', '.eraser')
-                            }}>
-                        </div>
+            img = <img
+                ref={node => { this.pencil = node }}
+            />;
+        else
+            img = <div className={'move'}
+                onMouseMove={() => { this.Mouse.dragLayerManagement('.move') }}
+                onClick={this.mouseClick}>
+                <img src={image.src}
+                    width={image.width}
+                    height={image.height}
+                    className={'move-img'}
+
+                />
+                <div className='move-resize'
+                    onMouseMove={() => {
+                        this.Mouse.resizeElement('.move-resize', '.move')
+                    }}>
                 </div>
-        }
-        
+            </div>
+
         return (
             <div>
                 {img}
             </div>
         )
     }
-} 
+}

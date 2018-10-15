@@ -1,0 +1,89 @@
+html, body {
+  margin: 0; 
+  height: 100px; 
+  /* overflow-y: hidden; */
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.app-wrapper {
+  width: 100vw;
+  height: 100vh;
+}
+.header {
+  width: 100vw;
+  height: auto;
+  position: relative;
+}
+.header-wrapper {
+  /* padding: 20px; */
+}
+.nav-bar-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  list-style: none;
+  background: #333;
+  margin: 0;
+}
+.nav-bar-list-iteam {
+  text-decoration: none;
+  display: block;
+  color: #fff;
+  padding: 1em;
+}
+.canvas-options {
+  display: none;
+}
+.app-body {
+  position: relative;
+}
+.drawing-place {
+  width: 70%;
+  position: absolute;
+  left: 15%;
+  top: 0;
+  background-color: #999;
+}
+.tool-bar {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+}
+.layer-management {
+  background-color: #888;
+  position: absolute;
+  right: 0;
+  z-index: 999;
+  width: 200px;
+  height: 300px;
+  overflow-y: scroll;
+}
+.eraser {
+  z-index: 999;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.pencil {
+  position: absolute;
+  z-index: 999;
+  left: 64px;
+}
+.move {
+  position: absolute;
+  z-index: 999;
+  left: 0px;
+  top: 64px
+}
+.colorPallete {
+  z-index: 999;
+  position: absolute;
+  left: 0px;
+  top: 200px;
+}
+
+
+
