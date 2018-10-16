@@ -23,6 +23,7 @@ export default class AppTest extends React.Component {
       bezier: 'none',
       text: 'off',
       brush: 'default',
+      createBezierBtnClicked: false,
       filter : '',
       image: null,
       widthFrame: window.innerWidth / 2,
@@ -142,10 +143,22 @@ export default class AppTest extends React.Component {
                     let canvas = _stageLayers.children[0].getImage();
                     let ctx = canvas.getContext('2d');
                     ctx.fillStyle = this.state.color;
-                    ctx.fillRect(_stageLayers.children[0].x(), _stageLayers.children[0].y(), _stageLayers.children[0].width(), _stageLayers.children[0].height());
+                    ctx.fillRect(_stageLayers.children[0].x(), _stageLayers.children[0].y(), 
+                                  _stageLayers.children[0].width(), _stageLayers.children[0].height());
                   }
                 }
+                console.log(_stageLayers.children[0]);
                 if (_stageLayers.children[0].id() === 'group') { // TODO: When you add Image you cant use bucket on Image because e.target !== _stageLayers.children[0].children[0] you must set to children[1]
+                  if (_stageLayers.children[0].children[0].id() === 'imgPlace') {
+                    if (e.target === _stageLayers.children[0].children[1]) {
+                      console.log(_stageLayers.children[0].children[1].getImage());
+                      let canvas = _stageLayers.children[0].children[1].getImage();
+                      let ctx = canvas.getContext('2d');
+                      ctx.fillStyle = this.state.color;
+                      ctx.fillRect(_stageLayers.children[0].children[1].x(), _stageLayers.children[0].children[1].y(),
+                                    _stageLayers.width(), _stageLayers.height());
+                    }
+                  }
                   if (_stageLayers.children[0].children[0].name() === 'shape') {
                     if (e.target === _stageLayers.children[0].children[0]) {
                       _stageLayers.children[0].children[0].fill(this.state.color);
@@ -221,12 +234,15 @@ export default class AppTest extends React.Component {
       }
       // this.getStage.draw();     
     });
-
     this.getStage.on('mouseup', () => {
       if (this.state.mode === 'shape' || this.state.mode === 'bezier') {
         this.endPaintShape = false;
         let anchors;
-        if (this.state.mode === 'bezier') {
+        if (this.state.mode === 'bezier' && this.state.createBezierBtnClicked === true) {
+          if (this.saveCanvas === 0) {
+            // return;
+          }
+          console.log(this.saveCanvas);
           let ctx = this.saveCanvas.getContext('2d');
           if (this.state.bezier !== 'modify-bezier') {
             let anchorss = this.getStage.find(node => {
@@ -358,6 +374,7 @@ export default class AppTest extends React.Component {
           this.offAllButtons();
         }
         this.saveFirstBezierPosition = undefined;
+        this.state.createBezierBtnClicked = false;
       }
     });
 
@@ -400,7 +417,10 @@ export default class AppTest extends React.Component {
                         / this.getStage.scaleY())
                     }
                     //This is for crate shape from mouse move
-                    if (this.state.mode === 'bezier') {
+                    if (this.state.mode === 'bezier' && this.state.createBezierBtnClicked === true) {
+                      if (_stageLayers.children[0].children === undefined) {
+                        // return;
+                      }
                       let img = _stageLayers.children[0].children[0].getImage();
                       this.saveCanvas = img;
                       this.saveBezier = _stageLayers.children[0];
@@ -550,8 +570,8 @@ export default class AppTest extends React.Component {
     this.setState({ shape: dataFromSettings });
   }
 
-  changeBezier = (dataFromSettings) => {
-    this.setState({ bezier: dataFromSettings });
+  changeBezier = (dataFromSettings, isClicked) => {
+    this.setState({ bezier: dataFromSettings, createBezierBtnClicked: isClicked });
   }
 
   popCanvasOptions = () => {

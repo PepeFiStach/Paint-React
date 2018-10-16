@@ -85,13 +85,18 @@ export default class Text extends React.Component {
             textarea.focus();
 
 
-            textarea.addEventListener('keydown', function (e) {
-                // hide on enter
-                if (e.keyCode === 13) {
-                    textNode.text(textarea.value);
-                    stage.draw();
-                    document.body.removeChild(textarea);
-                }
+            // textarea.addEventListener('keydown', function (e) {
+            //     // hide on enter
+            //     if (e.keyCode === 13) {
+            //         textNode.text(textarea.value);
+            //         stage.draw();
+            //         document.body.removeChild(textarea);
+            //     }
+            // });
+            textarea.addEventListener('mouseleave', function(e) {
+                textNode.text(textarea.value);
+                document.body.removeChild(textarea);
+                _stageLayers.draw();
             });
         });
     }

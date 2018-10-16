@@ -12,6 +12,7 @@ export default class Settings extends React.Component {
             FILTER: 'filter',
             SHAPE: 'shape',
             BEZIER: 'bezier',
+            BUCKET: 'bucket',
         }
 
         this.state = {
@@ -35,7 +36,7 @@ export default class Settings extends React.Component {
     }
     
     componentDidUpdate() {
-        if (this.props.mode === this.modes.PENCIL || this.props.mode === this.modes.SHAPE || this.props.mode === this.modes.BEZIER) {
+        if (this.props.mode === this.modes.PENCIL || this.props.mode === this.modes.SHAPE || this.props.mode === this.modes.BEZIER || this.props.mode === this.modes.BUCKET) {
             this.colorBox = document.querySelector('#color-box');
             this.colorBox.style.backgroundColor = this.props.color;
         }
@@ -110,9 +111,9 @@ export default class Settings extends React.Component {
         });
     }
 
-    setBezier = (bezier) => {
+    setBezier = (bezier, isClicked) => {
         this.state.whichBezier = bezier;
-        this.props.changeBezier(bezier);
+        this.props.changeBezier(bezier, isClicked);
         this.setState({
             whichBezier: bezier,
         });
@@ -417,7 +418,7 @@ export default class Settings extends React.Component {
                             <button
                                 onMouseDown={() => {
                                     // this.setShape('rect');
-                                    this.setBezier('create-bezier');
+                                    this.setBezier('create-bezier', true);
                                 }}>
                                     Create Bezier
                             </button>
@@ -481,7 +482,45 @@ export default class Settings extends React.Component {
                     </ul>
                 )
                 break;
-        
+            case this.modes.BUCKET:
+                el.style.display = 'block';
+                return (
+                    <ul>
+                        <li className={'rgb-options'}>
+                            <label htmlFor='color-R'>R</label>
+                            <input id='color-R' type='text'
+                                onMouseLeave={(e) => { e.target.blur() }}
+                                onClick={(e) => {e.target.select()}}
+                                onChange={(e) => { 
+                                    this.setColor() 
+                                }}
+                            >
+                            </input>
+                            <label htmlFor='color-G'>G</label>
+                            <input id='color-G' type='text'
+                                onMouseLeave={(e) => { e.target.blur() }}
+                                onClick={(e) => { e.target.select() }}
+                                onChange={(e) => { 
+                                    this.setColor()
+                                }}
+                            >
+                            </input>
+                            <label htmlFor='color-B'>B</label>
+                            <input id='color-B' type='text'
+                                onMouseLeave={(e) => { e.target.blur() }}
+                                onClick={(e) => { e.target.select() }}
+                                onChange={(e) => { 
+                                    this.setColor()
+                                }}
+                            >
+                            </input>
+                        </li>
+                        <div className={'color-box-wrapper'}>
+                            <div id='color-box'></div>
+                        </div>
+                    </ul>
+                )
+                break;
             default:
                 if (el !== null)
                     el.style.display = 'none';

@@ -90,6 +90,10 @@ export default class BezierCurve extends React.Component {
             id: 'anchor'
         });
         let bezierGroup = stage.find('#bezierGroup');
+        console.log(bezierGroup);
+        if (bezierGroup.length === 0) {
+            // return;
+        }
         bezierGroup[0].add(anchor);
         stage.draw();
 
