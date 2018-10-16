@@ -229,28 +229,28 @@ export default class AppTest extends React.Component {
         if (this.state.mode === 'bezier') {
           let ctx = this.saveCanvas.getContext('2d');
           if (this.state.bezier !== 'modify-bezier') {
-              let anchorss = this.getStage.find(node => {
-                return node.className === 'Circle' && node.id() === 'anchor'; 
-              });
+            let anchorss = this.getStage.find(node => {
+              return node.className === 'Circle' && node.id() === 'anchor'; 
+            });
             anchorss.forEach(node => {
               node.visible(false);
               this.getStage.draw();
             });
-  
+            
             ctx.clearRect(0, 0, this.saveCanvas.width, this.saveCanvas.height);
             ctx.beginPath();
             ctx.moveTo(this.anchorLocation.start.x, this.anchorLocation.start.y);
             ctx.lineTo(this.anchorLocation.end.x, this.anchorLocation.end.y);
             ctx.closePath();
             ctx.stroke();
-  
+            
             // this.getStage.draw();
             if (this.anchorLocation.center.x < 0)
-              this.anchorLocation.center.x = this.anchorLocation.center.x * (-1);
-  
+            this.anchorLocation.center.x = this.anchorLocation.center.x * (-1);
+            
             if (this.anchorLocation.center.y < 0)
-              this.anchorLocation.center.y = this.anchorLocation.center.y * (-1);
-  
+            this.anchorLocation.center.y = this.anchorLocation.center.y * (-1);
+            
             this.BezierCurve.createAnchor(this.anchorLocation.start.x, this.anchorLocation.start.y, this.getStage);
             this.BezierCurve.createAnchor(this.anchorLocation.center.x, this.anchorLocation.center.y, this.getStage);
             this.BezierCurve.createAnchor(this.anchorLocation.center.x - 50, this.anchorLocation.center.y - 50, this.getStage);
@@ -261,6 +261,7 @@ export default class AppTest extends React.Component {
           } else {
             anchors = this.saveAnchors;
             // this.state.bezier = 'none';
+            return;
           }
 
           // let anchors = this.getStage.find('Circle');
@@ -363,15 +364,15 @@ export default class AppTest extends React.Component {
     this.getStage.on('mousemove', (e) => {
       if (this.state.mode === 'shape' || this.state.mode === 'bezier') {
         if (this.state.bezier !== 'modify-bezier') {
-            const { layerManagement } = this.state;
-            const stageLayer = this.getStage.children;
-            if (!this.endPaintShape)
-              return;
-
-            layerManagement.forEach(_layersManagement => {
-              stageLayer.forEach((_stageLayers, i) => {
-                if (_layersManagement.activeLayer === 'true') {
-                  if (_stageLayers._id === _layersManagement.key) {
+          const { layerManagement } = this.state;
+          const stageLayer = this.getStage.children;
+          if (!this.endPaintShape)
+          return;
+          
+          layerManagement.forEach(_layersManagement => {
+            stageLayer.forEach((_stageLayers, i) => {
+              if (_layersManagement.activeLayer === 'true') {
+                if (_stageLayers._id === _layersManagement.key) {
                     let groupX = _stageLayers.children[0].x() * this.getStage.scaleX();
                     let groupY = _stageLayers.children[0].y() * this.getStage.scaleY();
 
