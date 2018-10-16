@@ -171,8 +171,11 @@ export default class Paint extends React.Component {
         }
 
         this.lastPointerPositionTemp = pos;
-        stage.draw();
-    }
-    retutnLocalPos = () => {
+        // stage.draw();
+        if (img.parent.id === 'group') {
+            img.parent.parent.draw();
+        } else {
+            img.parent.draw();
+        }
     }
 }

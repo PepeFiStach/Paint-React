@@ -124,6 +124,7 @@ export default class Mouse extends React.Component {
                                     ch.y(y / this.stage.scaleY());
 
                                     this.stage.draw();
+                                    console.log(ch);
                                 }
                             }
                         });

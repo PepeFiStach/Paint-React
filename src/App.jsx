@@ -275,8 +275,8 @@ export default class AppTest extends React.Component {
                                 anchors[2].attrs.x - 50, anchors[2].attrs.y - 50,
                                 anchors[3].attrs.x, anchors[3].attrs.y);
               ctx.stroke();
-
-              this.getStage.draw();
+              anchor.parent.parent.draw();
+              // this.getStage.draw();
             });
           });
           // let a = this.getStage.find(node => {
@@ -370,7 +370,7 @@ export default class AppTest extends React.Component {
           return;
           
           layerManagement.forEach(_layersManagement => {
-            stageLayer.forEach((_stageLayers, i) => {
+            stageLayer.forEach(_stageLayers => {
               if (_layersManagement.activeLayer === 'true') {
                 if (_stageLayers._id === _layersManagement.key) {
                     let groupX = _stageLayers.children[0].x() * this.getStage.scaleX();
@@ -454,7 +454,8 @@ export default class AppTest extends React.Component {
                       ctx.closePath();
                       ctx.stroke();
                       this.tmpPointerPosition = pos;
-                      this.getStage.draw();
+                      // this.getStage.draw();
+                      _stageLayers.draw();
                     }
                     if (this.state.mode === 'shape') {
                       if (_stageLayers.children[0].nodeType === 'Group') {
@@ -478,7 +479,8 @@ export default class AppTest extends React.Component {
                           if (_stageLayers.children[0].children[0].attrs.radiusY < 0)
                             _stageLayers.children[0].children[0].attrs.radiusX = 0;
                         }
-                        this.getStage.draw();
+                        // this.getStage.draw();
+                        _stageLayers.draw();
                       }
                     }
                   }
