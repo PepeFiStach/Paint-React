@@ -98,7 +98,7 @@ export default class AppTest extends React.Component {
                           this.state.sizeEraser, this.state.shape);
     console.log(this.getStage);
     console.log(this.state.mode);
-    console.log('Test for gh-pages');
+    console.log('Test for gh-pages ver.2');
     if (this.state.shape === 'rect' 
         || this.state.shape === 'star' 
         || this.state.shape === 'arrow'
@@ -139,25 +139,25 @@ export default class AppTest extends React.Component {
             if (_layersManagement.activeLayer === 'true') {
               if (_stageLayers._id === _layersManagement.key) {
                 if (_stageLayers.children[0].id() === 'drawingPlace') {
-                  if(e.target === _stageLayers.children[0]) {
+                  // if(e.target === _stageLayers.children[0]) {
                     let canvas = _stageLayers.children[0].getImage();
                     let ctx = canvas.getContext('2d');
                     ctx.fillStyle = this.state.color;
                     ctx.fillRect(_stageLayers.children[0].x(), _stageLayers.children[0].y(), 
                                   _stageLayers.children[0].width(), _stageLayers.children[0].height());
-                  }
+                  // }
                 }
                 console.log(_stageLayers.children[0]);
                 if (_stageLayers.children[0].id() === 'group') { // TODO: When you add Image you cant use bucket on Image because e.target !== _stageLayers.children[0].children[0] you must set to children[1]
                   if (_stageLayers.children[0].children[0].id() === 'imgPlace') {
-                    if (e.target === _stageLayers.children[0].children[1]) {
+                    // if (e.target === _stageLayers.children[0].children[1]) {
                       console.log(_stageLayers.children[0].children[1].getImage());
                       let canvas = _stageLayers.children[0].children[1].getImage();
                       let ctx = canvas.getContext('2d');
                       ctx.fillStyle = this.state.color;
                       ctx.fillRect(_stageLayers.children[0].children[1].x(), _stageLayers.children[0].children[1].y(),
                                     _stageLayers.width(), _stageLayers.height());
-                    }
+                    // }
                   }
                   if (_stageLayers.children[0].children[0].name() === 'shape') {
                     if (e.target === _stageLayers.children[0].children[0]) {
@@ -595,6 +595,7 @@ export default class AppTest extends React.Component {
     // HERE WILL BE CODE FROM INPUT TAG TO CREATE WIDTH AND HEIGHT CANVAS
     const canvasHeightOptions = document.querySelector('#canvas-height');
     const canvasWidthOptions = document.querySelector('#canvas-width');
+    this.offAllButtons();
     let newFileTMP = false;
 
     // This 3 are here because when I create new file these values must be reset
@@ -644,6 +645,7 @@ export default class AppTest extends React.Component {
       this.getStage.draw();
     } else {
       newFileTMP = false;
+      this.offAllButtons();
       alert('WIDTH AND HEIGHT MUST BE A NUMBER AND BIGER THEN 32PX');
     }
   }
@@ -678,6 +680,7 @@ export default class AppTest extends React.Component {
             // Center drawing place with height and width lower then stage width and hight
             this.getStage.x((this.getStage.width() - canvas.width) / 2);
             this.getStage.y((this.getStage.height() - canvas.height) / 2);
+            let saveScale = 1;
             // Center drawing place with any sizePencil
             // here i resize and scale stage u can resize layer but replace stage with l
             if (canvas.width >= this.getStage.width() ||
@@ -693,7 +696,7 @@ export default class AppTest extends React.Component {
                 this.getStage.y((this.getStage.height() - (canvas.height * i)) / 2);
                 i = i - 0.01;
                 breaker++;
-
+                saveScale = i;
                 if (breaker === 100) {
                   return;
                 }
@@ -701,6 +704,8 @@ export default class AppTest extends React.Component {
             }
             this.border.width(canvas.width);
             this.border.height(canvas.height);
+            this.border.strokeWidth(1 / saveScale);
+            console.log(saveScale);
 
             // Add img to drawing place
             // drawingPlace = img
