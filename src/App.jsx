@@ -98,6 +98,7 @@ export default class AppTest extends React.Component {
                           this.state.sizeEraser, this.state.shape);
     console.log(this.getStage);
     console.log(this.state.mode);
+    console.log('Test for gh-pages');
     if (this.state.shape === 'rect' 
         || this.state.shape === 'star' 
         || this.state.shape === 'arrow'
