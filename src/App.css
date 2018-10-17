@@ -18,7 +18,7 @@ main {
 footer {
   color: white;
   flex: 0 0 20px;
-  padding: 10px;
+  padding: 11px;
   background-color: black;
   font-size: 11px;
   box-shadow: 0px -20px 20px -9px rgba(0,0,0,0.5);
@@ -338,6 +338,12 @@ footer {
   height: 230px;
   box-shadow: 10px 20px 20px -9px rgba(0,0,0,0.5);
 }
+.layer-management-header {
+  font-size: 12px;
+}
+.layer-management-header > p{
+  padding-left: 10px;
+}
 .layer-management ul {
   width: 150px;
   height: 200px;
@@ -401,10 +407,27 @@ footer {
 }
 .settings ul {
   width: 200px;
-  height: 250px;
+  /* height: 250px; */
+  height: 230px;
   overflow-y: scroll;
   list-style: none;
   padding: 10px;
+}
+
+.settings-header, .layer-management-header {
+  display: flex;
+  flex-flow: row;
+  padding: 0;
+  height: 20px;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(221, 221, 221);
+  box-shadow: 0px 20px 20px -9px rgba(0,0,0,0.5);
+}
+.settings-header > img, .layer-management-header > img {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .settings button {
   width: 100px;

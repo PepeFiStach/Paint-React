@@ -24,7 +24,7 @@ export default class Mouse extends React.Component {
         this.Paint = new Paint(props);
     }
 
-    scroll = (e, scaleBy) => {
+    scroll = (e, scaleBy, border) => {
         let stageWidth = Math.round(this.stage.width() * 100) / 100;
         if (e.target.style.width === stageWidth.toString() + 'px') {
             var oldScale = this.stage.scaleX();
@@ -45,6 +45,10 @@ export default class Mouse extends React.Component {
             let l = this.stage.find('Transformer');
             if (l.lenght > 0) {
                 l[0].anchorSize(10 + this.stage.scaleX());
+            }
+
+            if (border !== 0) {
+                border.strokeWidth(1 / this.stage.scaleX());
             }
             this.stage.draw();
         }

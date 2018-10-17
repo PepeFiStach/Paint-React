@@ -9,6 +9,7 @@ import BezierCurve from './Component/ToolBarComponent/BezierCurve';
 import Settings from './Component/Settings';
 import Header from './Component/Header';
 import Mouse from './Functionality/Mouse';
+import settings from './Image/icons/settings-var-flat/512x512.png';
 
 export default class AppTest extends React.Component {
   constructor(props) {
@@ -68,7 +69,7 @@ export default class AppTest extends React.Component {
     });
     
     window.addEventListener('wheel', (e) => {
-      this.Mouse.scroll(e, this.scaleBy);
+      this.Mouse.scroll(e, this.scaleBy, this.border);
     });
     
     this.getStage.on('mouseenter', () => {
@@ -1194,6 +1195,14 @@ export default class AppTest extends React.Component {
             <div className='layer-management' 
               onMouseMove={(event) => { this.Mouse.dragLayerManagement('.layer-management', event) }}>
               <ul>
+              <div className={'layer-management-header'}>
+                    <img
+                        src={settings}
+                        width={20}
+                        height={20}
+                    ></img>
+                    <p>Layer Management</p>
+                  </div>
                 {
                   this.state.layerManagement.map((_layers, index) => {
                     return (
