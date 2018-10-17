@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/Paint-React/static/media/pencil-white.09f9d692.png"
   },
   {
-    "revision": "41811eb8a80d630836f7",
-    "url": "/Paint-React/static/css/main.0e94500f.chunk.css"
+    "revision": "546509ea5181bfddf9c8",
+    "url": "/Paint-React/static/css/main.f578dbb2.chunk.css"
   },
   {
     "revision": "c79029ca61c5754e37a9",
@@ -24,8 +24,8 @@ self.__precacheManifest = [
     "url": "/Paint-React/static/media/move.b10cd0bb.jpg"
   },
   {
-    "revision": "41811eb8a80d630836f7",
-    "url": "/Paint-React/static/js/main.41811eb8.chunk.js"
+    "revision": "546509ea5181bfddf9c8",
+    "url": "/Paint-React/static/js/main.546509ea.chunk.js"
   },
   {
     "revision": "1fdf0851ca5fab435f2ed564f00f6511",
@@ -44,7 +44,7 @@ self.__precacheManifest = [
     "url": "/Paint-React/static/media/color-wheel.0fc36b2a.png"
   },
   {
-    "revision": "c4c7674e53a2ac9433ab3fea4359d10b",
+    "revision": "805e3ed92ffd03cfc718408a541f8ec9",
     "url": "/Paint-React/index.html"
   }
 ];

@@ -1,7 +1,7 @@
 {
-  "main.css": "/Paint-React/static/css/main.0e94500f.chunk.css",
-  "main.js": "/Paint-React/static/js/main.41811eb8.chunk.js",
-  "main.js.map": "/Paint-React/static/js/main.41811eb8.chunk.js.map",
+  "main.css": "/Paint-React/static/css/main.f578dbb2.chunk.css",
+  "main.js": "/Paint-React/static/js/main.546509ea.chunk.js",
+  "main.js.map": "/Paint-React/static/js/main.546509ea.chunk.js.map",
   "static/js/1.c79029ca.chunk.js": "/Paint-React/static/js/1.c79029ca.chunk.js",
   "static/js/1.c79029ca.chunk.js.map": "/Paint-React/static/js/1.c79029ca.chunk.js.map",
   "runtime~main.js": "/Paint-React/static/js/runtime~main.cb62902f.js",
@@ -13,8 +13,8 @@
   "static/media/ruber-white.png": "/Paint-React/static/media/ruber-white.8c702c16.png",
   "static/media/color-wheel.png": "/Paint-React/static/media/color-wheel.0fc36b2a.png",
   "static/media/move.jpg": "/Paint-React/static/media/move.b10cd0bb.jpg",
-  "static/css/main.0e94500f.chunk.css.map": "/Paint-React/static/css/main.0e94500f.chunk.css.map",
+  "static/css/main.f578dbb2.chunk.css.map": "/Paint-React/static/css/main.f578dbb2.chunk.css.map",
   "index.html": "/Paint-React/index.html",
-  "precache-manifest.04b12559525de5d2206deb1a222e66b9.js": "/Paint-React/precache-manifest.04b12559525de5d2206deb1a222e66b9.js",
+  "precache-manifest.ed0b59144a6695b5dc3a74c09cf8ad26.js": "/Paint-React/precache-manifest.ed0b59144a6695b5dc3a74c09cf8ad26.js",
   "service-worker.js": "/Paint-React/service-worker.js"
 }
