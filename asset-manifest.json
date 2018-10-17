@@ -1,7 +1,7 @@
 {
   "main.css": "/Paint-React/static/css/main.f578dbb2.chunk.css",
-  "main.js": "/Paint-React/static/js/main.546509ea.chunk.js",
-  "main.js.map": "/Paint-React/static/js/main.546509ea.chunk.js.map",
+  "main.js": "/Paint-React/static/js/main.f64ad544.chunk.js",
+  "main.js.map": "/Paint-React/static/js/main.f64ad544.chunk.js.map",
   "static/js/1.c79029ca.chunk.js": "/Paint-React/static/js/1.c79029ca.chunk.js",
   "static/js/1.c79029ca.chunk.js.map": "/Paint-React/static/js/1.c79029ca.chunk.js.map",
   "runtime~main.js": "/Paint-React/static/js/runtime~main.cb62902f.js",
@@ -15,6 +15,6 @@
   "static/media/move.jpg": "/Paint-React/static/media/move.b10cd0bb.jpg",
   "static/css/main.f578dbb2.chunk.css.map": "/Paint-React/static/css/main.f578dbb2.chunk.css.map",
   "index.html": "/Paint-React/index.html",
-  "precache-manifest.ed0b59144a6695b5dc3a74c09cf8ad26.js": "/Paint-React/precache-manifest.ed0b59144a6695b5dc3a74c09cf8ad26.js",
+  "precache-manifest.cb6040ace1e58f67f720f18e3ad646e0.js": "/Paint-React/precache-manifest.cb6040ace1e58f67f720f18e3ad646e0.js",
   "service-worker.js": "/Paint-React/service-worker.js"
 }
