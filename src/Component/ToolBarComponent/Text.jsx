@@ -81,22 +81,23 @@ export default class Text extends React.Component {
             textarea.style.top = areaPosition.y + 'px';
             textarea.style.left = areaPosition.x + 'px';
             textarea.style.width = textNode.width();
-
             textarea.focus();
 
-
-            // textarea.addEventListener('keydown', function (e) {
-            //     // hide on enter
-            //     if (e.keyCode === 13) {
-            //         textNode.text(textarea.value);
-            //         stage.draw();
-            //         document.body.removeChild(textarea);
-            //     }
-            // });
+            textarea.addEventListener('keydown', function (e) {
+                // hide on enter
+                console.log(e.keyCode);
+                if (e.keyCode === 27) {
+                    textNode.text(textarea.value);
+                    stage.draw();
+                    document.body.removeChild(textarea);
+                }
+            });
             textarea.addEventListener('mouseleave', function(e) {
-                textNode.text(textarea.value);
-                document.body.removeChild(textarea);
-                _stageLayers.draw();
+                if (e.buttons === 0) {
+                    textNode.text(textarea.value);
+                    document.body.removeChild(textarea);
+                    _stageLayers.draw();
+                }
             });
         });
     }
