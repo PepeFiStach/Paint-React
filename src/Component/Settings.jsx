@@ -1,6 +1,7 @@
 import React from 'react';
 import Mouse from '../Functionality/Mouse';
-import settings from '../Image/icons/settings-var-flat/512x512.png';
+//import settings from '../Image/icons/settings-var-flat/512x512.png';
+import settings from '../Image/icons2/settings-outline/512x512.png';
 
 export default class Settings extends React.Component {
     constructor(props) {
@@ -161,8 +162,8 @@ export default class Settings extends React.Component {
                         <li className={'settings-header'}>
                             <img
                                 src={settings}
-                                width={20}
-                                height={20}
+                                width={15}
+                                height={15}
                             ></img>
                             <p>pencil</p>
                         </li>
@@ -236,8 +237,8 @@ export default class Settings extends React.Component {
                         <li className={'settings-header'}>
                         <img
                             src={settings}
-                            width={20}
-                            height={20}
+                            width={15}
+                            height={15}
                         ></img>
                         <p>eraser</p>
                         </li>
@@ -268,8 +269,8 @@ export default class Settings extends React.Component {
                         <li className={'settings-header'}>
                             <img
                                 src={settings}
-                                width={20}
-                                height={20}
+                                width={15}
+                                height={15}
                             ></img>
                             <p>filter</p>
                         </li>
@@ -397,8 +398,8 @@ export default class Settings extends React.Component {
                         <li className={'settings-header'}>
                             <img
                                 src={settings}
-                                width={20}
-                                height={20}
+                                width={15}
+                                height={15}
                             ></img>
                             <p>shape</p>
                         </li>
@@ -458,8 +459,8 @@ export default class Settings extends React.Component {
                         <li className={'settings-header'}>
                             <img
                                 src={settings}
-                                width={20}
-                                height={20}
+                                width={15}
+                                height={15}
                             ></img>
                             <p>bezier curve</p>
                         </li>
@@ -540,8 +541,8 @@ export default class Settings extends React.Component {
                         <li className={'settings-header'}>
                             <img
                                 src={settings}
-                                width={20}
-                                height={20}
+                                width={15}
+                                height={15}
                             ></img>
                             <p>bucket</p>
                         </li>

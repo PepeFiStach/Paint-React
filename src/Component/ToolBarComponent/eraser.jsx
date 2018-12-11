@@ -1,6 +1,8 @@
 import React from 'react';
-import ruber from '../../Image/ruber.png';
-import ruberWhite from '../../Image/ruber-white.png';
+//import eraser from '../../Image/eraser.png';
+//import eraserWhite from '../../Image/eraser-white.png';
+import eraser from '../../Image/icons2/edit-outline/512x512eraserw.png';
+import eraserBlack from '../../Image/icons2/edit-outline/512x512eraserb.png'
 import Mouse from '../../Functionality/Mouse';
 
 export default class Eraser extends React.Component {
@@ -18,7 +20,7 @@ export default class Eraser extends React.Component {
     
     componentDidMount() {
         const image = new window.Image();
-        image.src = ruber;
+        image.src = eraser;
         image.width = 32;
         image.height = 32;
         image.onload = () => {
@@ -32,7 +34,7 @@ export default class Eraser extends React.Component {
         const image = new window.Image();
         image.width = 32;
         image.height = 32;
-        image.src = ruber;
+        image.src = eraser;
         this.state.mode = 'no-eraser';
         this.state.stateClick = false;
         image.onload = () => {
@@ -50,9 +52,10 @@ export default class Eraser extends React.Component {
         const elMove = document.querySelector('.eraser-img');
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = ruberWhite;
+            image.src = eraserBlack;
             this.state.mode = 'eraser';
             elMove.id = 'eraser-id';
             this.state.stateClick = true;
@@ -65,9 +68,10 @@ export default class Eraser extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
-            image.src = ruber;
+            image.src = eraser;
             this.state.mode = 'no-eraser';
             elMove.removeAttribute('id');
             this.state.stateClick = false;

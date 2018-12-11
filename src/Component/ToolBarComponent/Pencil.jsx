@@ -1,6 +1,8 @@
 import React from 'react';
-import pencil from '../../Image/pencil.jpg';
-import pencilWhite from '../../Image/pencil-white.png';
+//import pencil from '../../Image/pencil.jpg';
+//import pencilWhite from '../../Image/pencil-white.png';
+import pencil from '../../Image/icons2/edit-outline/512x512bgw.png';
+import pencilBlack from '../../Image/icons2/edit-outline/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
 
 export default class Pencil extends React.Component {
@@ -21,6 +23,8 @@ export default class Pencil extends React.Component {
         image.src = pencil;
         image.width = 32;
         image.height = 32;
+        this.p = document.querySelector('.pencil-img');
+        console.log(this.p);
         image.onload = () => {
             this.setState({
                 image: image,
@@ -50,9 +54,10 @@ export default class Pencil extends React.Component {
         const elMove = document.querySelector('.pencil-img');
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentNode.style.backgroundColor = '#000';
             image.width = 32;
             image.height = 32;
-            image.src = pencilWhite;
+            image.src = pencilBlack;
             this.state.mode = 'pencil';
             elMove.id = 'pencil-id';
             this.state.stateClick = true;
@@ -65,6 +70,7 @@ export default class Pencil extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentNode.style.backgroundColor = '#fff';
             image.width = 32;
             image.height = 32;
             image.src = pencil;

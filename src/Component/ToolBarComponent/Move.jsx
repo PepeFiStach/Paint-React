@@ -1,7 +1,9 @@
 import React from 'react';
-import move from '../../Image/move.jpg';
-import moveWhite from '../../Image/move-white.jpg';
+//import move from '../../Image/move.jpg';
+//import moveWhite from '../../Image/move-white.jpg';
 import Mouse from '../../Functionality/Mouse';
+import move from '../../Image/icons2/cursor-outline/512x512bgw.png';
+import moveBlack from '../../Image/icons2/cursor-outline/512x512bgb.png';
 
 export default class Move extends React.Component {
     constructor(props) {
@@ -51,9 +53,10 @@ export default class Move extends React.Component {
 
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = moveWhite;
+            image.src = moveBlack;
             this.state.mode = 'move';
             elMove.id = 'move-id';
             this.state.stateClick = true;
@@ -66,6 +69,7 @@ export default class Move extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
             image.src = move;

@@ -1,7 +1,9 @@
 import React from 'react';
 import Konva from 'konva';
-import resize from '../../Image/pencil.jpg';
-import resizeWhite from '../../Image/pencil-white.png';
+//import resize from '../../Image/pencil.jpg';
+//import resizeWhite from '../../Image/pencil-white.png';
+import resize from '../../Image/icons2/popout-outline/512x512bgw.png';
+import resizeBlack from '../../Image/icons2/popout-outline/512x512bgb.png'
 import Mouse from '../../Functionality/Mouse';
 
 export default class Resize extends React.Component {
@@ -59,9 +61,10 @@ export default class Resize extends React.Component {
         const elMove = document.querySelector('.resize-img');
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = resizeWhite;
+            image.src = resizeBlack;
             this.state.mode = 'resize';
             elMove.id = 'resize-id';
             this.state.stateClick = true;
@@ -74,6 +77,7 @@ export default class Resize extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
             image.src = resize;

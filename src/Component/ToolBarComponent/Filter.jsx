@@ -1,6 +1,8 @@
 import React from 'react';
-import filter from '../../Image/move.jpg';
-import filterWhite from '../../Image/move-white.jpg';
+//import filter from '../../Image/move.jpg';
+//import filterWhite from '../../Image/move-white.jpg';
+import filter from '../../Image/icons2/options-horizontal-outline/512x512bgw.png';
+import filterBlack from '../../Image/icons2/options-horizontal-outline/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
 
 export default class Filter extends React.Component {
@@ -51,9 +53,10 @@ export default class Filter extends React.Component {
         const elMove = document.querySelector('.filter-img');
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = filterWhite;
+            image.src = filterBlack;
             this.state.mode = 'filter';
             elMove.id = 'filter-id';
             this.state.stateClick = true;
@@ -66,6 +69,7 @@ export default class Filter extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
             image.src = filter;

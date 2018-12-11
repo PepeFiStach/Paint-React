@@ -9,7 +9,13 @@ import BezierCurve from './Component/ToolBarComponent/BezierCurve';
 import Settings from './Component/Settings';
 import Header from './Component/Header';
 import Mouse from './Functionality/Mouse';
-import settings from './Image/icons/settings-var-flat/512x512.png';
+//import settings from './Image/icons/settings-var-flat/512x512.png';
+import settingsImage from './Image/icons2/settings-outline/512x512.png';
+import addImage from './Image/icons2/plus-circle-outline/512x512.png';
+import trashImage from './Image/icons2/trash-var-outline/512x512.png';
+import ArrowImage from './Image/icons2/location-arrow-outline/512x512.png';
+import visibleImage from './Image/icons2/eye-outline/512x512bgw.png';
+import visibleImageBlack from './Image/icons2/eye-outline/512x512bgb.png';
 
 export default class AppTest extends React.Component {
   constructor(props) {
@@ -518,6 +524,7 @@ export default class AppTest extends React.Component {
                           '.layer-management ul li');
 
     const elInvisibleBtn = document.querySelectorAll('.invisible-btn');
+    const elInvisibleImg = document.querySelectorAll('.invisible-btn-img');
 
     elLayerManagement.forEach(el => {
       if (el.attributes['name'].value === 'true')
@@ -526,11 +533,15 @@ export default class AppTest extends React.Component {
         el.style.backgroundColor = '#666';
     });
 
-    elInvisibleBtn.forEach(el => {
-      if (el.attributes['name'].value === 'true')
-        el.style.backgroundColor = '#333';
-      else
-        el.style.backgroundColor = '#fff';
+    elInvisibleImg.forEach(el => {
+      if (el.attributes['name'].value === 'true') {
+        el.parentElement.style.backgroundColor = '#fff';
+        el.src = visibleImage;
+      }
+      else {
+        el.parentElement.style.backgroundColor = '#000';
+        el.src = visibleImageBlack;
+      }
     });
 
   }
@@ -813,6 +824,12 @@ export default class AppTest extends React.Component {
         node.visible(false);
       });
     }
+
+    this.hambureger = document.querySelector('#nav-icon1');
+    this.nav = document.querySelector('#pop-up-navbar');
+    this.nav.classList.remove('open');
+    this.hambureger.classList.remove('open');
+
     this.state.bezier = 'none';
     const el = document.querySelectorAll('img');
     el.forEach(img => {
@@ -1034,13 +1051,13 @@ export default class AppTest extends React.Component {
     layerManagement.forEach(_layersManagement => {
       stageLayer.forEach((_layers, _index) => {
         if (e.target.id === _layers._id.toString() && e.target.id === _layersManagement.key.toString()) {
-          if (_index >= 1) {
-            if (_layers.visible() === false)
-              _layers.visible(true);
-            else
-              _layers.visible(false);
-          } else {
-            alert('You can not turn off last layer');
+          if (_layers.visible() === false) {
+            _layers.visible(true);
+            console.log('IF VISIBLE');
+          }
+          else {
+            _layers.visible(false);
+            console.log('IF NOT VISIBLE');
           }
         }
       });
@@ -1049,12 +1066,10 @@ export default class AppTest extends React.Component {
 
       layerManagement.forEach((_layers, _index) => {
         if (e.target.id === _layers.key.toString()) {
-          if (_index >= 1) {
-            if (_layers.isVisible === 'true')
-              _layers.isVisible = 'false';
-            else
-              _layers.isVisible = 'true';
-          }
+          if (_layers.isVisible === 'true')
+            _layers.isVisible = 'false';
+          else
+            _layers.isVisible = 'true';
         }
       });
 
@@ -1190,19 +1205,25 @@ export default class AppTest extends React.Component {
             add={this.newFile}
             popCanvasOptions={this.popCanvasOptions}
           />
-
+          {/* <div id={'pop-up-navbar'}>
+            <ul>
+              <li>asd</li>
+              <li>asd</li>
+              <li>asd</li>
+            </ul>
+          </div> */}
           <main>
             <div className='layer-management' 
               onMouseMove={(event) => { this.Mouse.dragLayerManagement('.layer-management', event) }}>
-              <ul>
               <div className={'layer-management-header'}>
-                    <img
-                        src={settings}
-                        width={20}
-                        height={20}
-                    ></img>
-                    <p>Layer Management</p>
-                  </div>
+                <img
+                    src={settingsImage}
+                    width={15}
+                    height={15}
+                ></img>
+                <p>Layer Management</p>
+              </div>
+              <ul>
                 {
                   this.state.layerManagement.map((_layers, index) => {
                     return (
@@ -1214,9 +1235,14 @@ export default class AppTest extends React.Component {
                         >
                           <div className={'invisible-btn'}
                             id={_layers.key} 
-                            name={_layers.isVisible}
-                            onMouseDown={(e) => { this.offAllButtons(); this.setInvisible(e); }}>
-                              o
+                            name={_layers.isVisible}>
+                              <img src={visibleImage}
+                                id={_layers.key}
+                                name={_layers.isVisible}
+                                className={'invisible-btn-img'}
+                                onMouseDown={(e) => { this.offAllButtons(); this.setInvisible(e); }}>
+                                
+                              </img>
                           </div>
                           {index} {_layers.name} {_layers.key}
                         </li>
@@ -1232,18 +1258,42 @@ export default class AppTest extends React.Component {
                       this.buttonUpClick = true;
                       this.moveLayerUpOrBottom(this.buttonUpClick);
                       this.offAllButtons();
-                     }}>/\</button>
+                     }}>
+                      <img
+                        src={ArrowImage}
+                        width={12}
+                        height={12}
+                      ></img>
+                     </button>
                   <button className='layer-management-options-btn down-btn'
                     onMouseDown={() => {
                       this.buttonUpClick = false;
                       this.moveLayerUpOrBottom(this.buttonUpClick);
                       this.offAllButtons();
-                     }}>\/</button>
+                     }}>
+                      <img
+                        src={ArrowImage}
+                        width={12}
+                        height={12}
+                      ></img>
+                     </button>
                 </div>
                 <button className='layer-management-options-btn add-btn'
-                onClick={() => { this.offAllButtons(); this.addLayer(null); }}>add</button>
+                  onClick={() => { this.offAllButtons(); this.addLayer(null); }}>
+                    <img
+                      src={addImage}
+                      width={18}
+                      height={18}
+                    ></img>
+                </button>
                 <button className='layer-management-options-btn remove-btn'
-                onClick={() => { this.offAllButtons(); this.removeLayer() }}>remove</button>
+                  onClick={() => { this.offAllButtons(); this.removeLayer() }}>
+                    <img
+                      src={trashImage}
+                      width={18}
+                      height={18}
+                    ></img>
+                </button>
               </div>
             </div>
             <ToolBar mode={this.changeMode}
@@ -1279,7 +1329,7 @@ export default class AppTest extends React.Component {
 
           <footer>
             <div className='footer-wrapper wrapper'>
-              Soon there will be a footer here !
+              Praca Inżynierska - Michał Adamkowski &copy; Uniwersytet Kazmierza Wielkiego Bydgoszcz 2018
             </div>
           </footer>
       </div>

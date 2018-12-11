@@ -1,6 +1,8 @@
 import React from 'react';
-import bucket from '../../Image/ruber.png';
-import bucketWhite from '../../Image/ruber-white.png';
+//import bucket from '../../Image/ruber.png';
+//import bucketWhite from '../../Image/ruber-white.png';
+import bucket from '../../Image/icons2/bucket/512x512bgw.png';
+import bucketBlack from '../../Image/icons2/bucket/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
 
 export default class Bucket extends React.Component {
@@ -50,9 +52,10 @@ export default class Bucket extends React.Component {
         const elMove = document.querySelector('.bucket-img');
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = bucketWhite;
+            image.src = bucketBlack;
             this.state.mode = 'bucket';
             elMove.id = 'bucket-id';
             this.state.stateClick = true;
@@ -65,6 +68,7 @@ export default class Bucket extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
             image.src = bucket;

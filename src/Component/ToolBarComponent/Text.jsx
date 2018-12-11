@@ -1,7 +1,9 @@
 import React from 'react';
-import text from '../../Image/pencil.jpg';
 import Konva from 'konva';
-import textWhite from '../../Image/pencil-white.png';
+//import text from '../../Image/pencil.jpg';
+//import textWhite from '../../Image/pencil-white.png';
+import text from '../../Image/icons2/text/512x512bgw.png';
+import textBlack from '../../Image/icons2/text/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
 
 export default class Text extends React.Component {
@@ -108,9 +110,10 @@ export default class Text extends React.Component {
         const elMove = document.querySelector('.text-img');
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = textWhite;
+            image.src = textBlack;
             this.state.mode = 'text';
             elMove.id = 'text-id';
             this.state.stateClick = true;
@@ -124,6 +127,7 @@ export default class Text extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
             image.src = text;

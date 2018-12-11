@@ -9,7 +9,7 @@ import Text from './ToolBarComponent/Text';
 import Bucket from './ToolBarComponent/Bucket';
 import BezierCurve from './ToolBarComponent/BezierCurve';
 import ColorPallete from './ToolBarComponent/ColorPallete';
-
+import ColorPicker from './ToolBarComponent/ColorPicker';
 
 export default class ToolBar extends React.Component {
     constructor(props) {
@@ -163,8 +163,9 @@ export default class ToolBar extends React.Component {
                 <BezierCurve changeMode={this.changeMode} ref={node => {this.bezier = node}}
                     offAllButtons={() => { this.props.offAllButtons() }}
                     changeText={this.changeText}/>
-                <ColorPallete changeColor={this.changeColor}/>
+                <ColorPicker changeColor={this.changeColor}/>
             </div>
+                //<ColorPallete changeColor={this.changeColor}/> 
         )
     }
 }

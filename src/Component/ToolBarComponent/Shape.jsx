@@ -1,7 +1,9 @@
 import React from 'react';
 import Konva from 'konva';
-import shape from '../../Image/pencil.jpg';
-import shapeWhite from '../../Image/pencil-white.png';
+//import shape from '../../Image/pencil.jpg';
+//import shapeWhite from '../../Image/pencil-white.png';
+import shape from '../../Image/icons2/stop-outline/512x512bgw.png';
+import shapeBlack from '../../Image/icons2/stop-outline/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
 
 export default class Shape extends React.Component {
@@ -153,9 +155,10 @@ export default class Shape extends React.Component {
         const elMove = document.querySelector('.shape-img');
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = shapeWhite;
+            image.src = shapeBlack;
             this.state.mode = 'shape';
             elMove.id = 'shape-id';
             this.state.stateClick = true;
@@ -168,6 +171,7 @@ export default class Shape extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
             image.src = shape;

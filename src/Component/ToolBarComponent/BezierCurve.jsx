@@ -1,7 +1,9 @@
 import React from 'react';
 import Konva from 'konva';
-import bezier from '../../Image/move.jpg';
-import bezierWhite from '../../Image/move-white.jpg';
+//import bezier from '../../Image/move.jpg';
+//import bezierWhite from '../../Image/move-white.jpg';
+import bezier from '../../Image/icons2/bezier-curve/512x512bgw.png';
+import bezierBlack from '../../Image/icons2/bezier-curve/512x512bgb.png'
 import Mouse from '../../Functionality/Mouse';
 
 export default class BezierCurve extends React.Component {
@@ -109,9 +111,10 @@ export default class BezierCurve extends React.Component {
 
         if (!stateClick) {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#000";
             image.width = 32;
             image.height = 32;
-            image.src = bezierWhite;
+            image.src = bezierBlack;
             this.state.mode = 'bezier';
             elMove.id = 'bezier-id';
             this.state.stateClick = true;
@@ -124,6 +127,7 @@ export default class BezierCurve extends React.Component {
             };
         } else {
             const image = new window.Image();
+            elMove.parentElement.style.backgroundColor = "#fff";
             image.width = 32;
             image.height = 32;
             image.src = bezier;
