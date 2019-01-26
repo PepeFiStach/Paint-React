@@ -4,12 +4,12 @@ self.__precacheManifest = [
     "url": "/Paint-React/static/media/512x512bgw.431e3d11.png"
   },
   {
-    "revision": "94a03214e05fd6ee4270",
-    "url": "/Paint-React/static/css/main.e8978249.chunk.css"
+    "revision": "5470db31664fdee1f73c",
+    "url": "/Paint-React/static/css/main.10764548.chunk.css"
   },
   {
-    "revision": "c34c55d1633614c7cdd4",
-    "url": "/Paint-React/static/js/1.c34c55d1.chunk.js"
+    "revision": "50458f66de141fea0e0a",
+    "url": "/Paint-React/static/js/1.50458f66.chunk.js"
   },
   {
     "revision": "cb62902f786f9c358883",
@@ -24,8 +24,8 @@ self.__precacheManifest = [
     "url": "/Paint-React/static/media/512x512eraserw.ef2dc711.png"
   },
   {
-    "revision": "94a03214e05fd6ee4270",
-    "url": "/Paint-React/static/js/main.94a03214.chunk.js"
+    "revision": "5470db31664fdee1f73c",
+    "url": "/Paint-React/static/js/main.5470db31.chunk.js"
   },
   {
     "revision": "ab8211cd62f1f0c35fc97233d7ca0d1d",
@@ -48,7 +48,7 @@ self.__precacheManifest = [
     "url": "/Paint-React/static/media/512x512.36cb85dc.png"
   },
   {
-    "revision": "d86f9cfe758c88238143f16b9b4b97a2",
+    "revision": "e0ca09b59fa64ec4edc6db140a8c4685",
     "url": "/Paint-React/index.html"
   }
 ];

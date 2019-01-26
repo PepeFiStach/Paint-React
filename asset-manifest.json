@@ -1,9 +1,9 @@
 {
-  "main.css": "/Paint-React/static/css/main.e8978249.chunk.css",
-  "main.js": "/Paint-React/static/js/main.94a03214.chunk.js",
-  "main.js.map": "/Paint-React/static/js/main.94a03214.chunk.js.map",
-  "static/js/1.c34c55d1.chunk.js": "/Paint-React/static/js/1.c34c55d1.chunk.js",
-  "static/js/1.c34c55d1.chunk.js.map": "/Paint-React/static/js/1.c34c55d1.chunk.js.map",
+  "main.css": "/Paint-React/static/css/main.10764548.chunk.css",
+  "main.js": "/Paint-React/static/js/main.5470db31.chunk.js",
+  "main.js.map": "/Paint-React/static/js/main.5470db31.chunk.js.map",
+  "static/js/1.50458f66.chunk.js": "/Paint-React/static/js/1.50458f66.chunk.js",
+  "static/js/1.50458f66.chunk.js.map": "/Paint-React/static/js/1.50458f66.chunk.js.map",
   "runtime~main.js": "/Paint-React/static/js/runtime~main.cb62902f.js",
   "runtime~main.js.map": "/Paint-React/static/js/runtime~main.cb62902f.js.map",
   "static/media/512x512.png": "/Paint-React/static/media/512x512.36cb85dc.png",
@@ -12,8 +12,8 @@
   "static/media/512x512bgb.png": "/Paint-React/static/media/512x512bgb.0314a455.png",
   "static/media/512x512w.png": "/Paint-React/static/media/512x512w.7f297d24.png",
   "static/media/512x512eraserw.png": "/Paint-React/static/media/512x512eraserw.ef2dc711.png",
-  "static/css/main.e8978249.chunk.css.map": "/Paint-React/static/css/main.e8978249.chunk.css.map",
+  "static/css/main.10764548.chunk.css.map": "/Paint-React/static/css/main.10764548.chunk.css.map",
   "index.html": "/Paint-React/index.html",
-  "precache-manifest.ded0c4af2e61740b1aff247d437a0c69.js": "/Paint-React/precache-manifest.ded0c4af2e61740b1aff247d437a0c69.js",
+  "precache-manifest.b59d9dd53daaed61bc527c917d695628.js": "/Paint-React/precache-manifest.b59d9dd53daaed61bc527c917d695628.js",
   "service-worker.js": "/Paint-React/service-worker.js"
 }
