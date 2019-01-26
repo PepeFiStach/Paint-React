@@ -1,6 +1,4 @@
 import React from 'react';
-//import bucket from '../../Image/ruber.png';
-//import bucketWhite from '../../Image/ruber-white.png';
 import bucket from '../../Image/icons2/bucket/512x512bgw.png';
 import bucketBlack from '../../Image/icons2/bucket/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';

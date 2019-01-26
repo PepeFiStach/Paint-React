@@ -1,7 +1,5 @@
 import React from 'react';
 import Konva from 'konva';
-//import shape from '../../Image/pencil.jpg';
-//import shapeWhite from '../../Image/pencil-white.png';
 import shape from '../../Image/icons2/stop-outline/512x512bgw.png';
 import shapeBlack from '../../Image/icons2/stop-outline/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
@@ -66,11 +64,6 @@ export default class Shape extends React.Component {
 
     createStar = (canvas, _stageLayers, drawingPlace, color) => {
         const shape = new Konva.Star({
-            // x: -9999,
-            // y: -9999,
-            // numPoints: 5,
-            // innerRadius: canvas.width / 4,
-            // outerRadius: canvas.width / 4,
             x: -9999,
             y: -9999,
             numPoints: 5,

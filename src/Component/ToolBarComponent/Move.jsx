@@ -1,6 +1,4 @@
 import React from 'react';
-//import move from '../../Image/move.jpg';
-//import moveWhite from '../../Image/move-white.jpg';
 import Mouse from '../../Functionality/Mouse';
 import move from '../../Image/icons2/cursor-outline/512x512bgw.png';
 import moveBlack from '../../Image/icons2/cursor-outline/512x512bgb.png';

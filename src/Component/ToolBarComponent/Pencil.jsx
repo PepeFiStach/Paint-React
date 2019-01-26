@@ -1,6 +1,4 @@
 import React from 'react';
-//import pencil from '../../Image/pencil.jpg';
-//import pencilWhite from '../../Image/pencil-white.png';
 import pencil from '../../Image/icons2/edit-outline/512x512bgw.png';
 import pencilBlack from '../../Image/icons2/edit-outline/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
@@ -24,7 +22,6 @@ export default class Pencil extends React.Component {
         image.width = 32;
         image.height = 32;
         this.p = document.querySelector('.pencil-img');
-        console.log(this.p);
         image.onload = () => {
             this.setState({
                 image: image,

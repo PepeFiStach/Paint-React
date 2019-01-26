@@ -168,12 +168,6 @@ export default class Paint extends React.Component {
                     break;
             }
         }
-        // group[0].width(localPos.x);
-        // group[0].height(localPos.y);
-        // group[0].children[0].width(localPos.x);
-        // group[0].children[0].height(localPos.y);
-        // group[0].children[1].width(localPos.x);
-        // group[0].children[1].height(localPos.y);
 
         if (brush !== 'spray' && brush !== 'blender' || mode === 'eraser') {
             ctx.lineTo(localPos.x, localPos.y);
@@ -182,13 +176,6 @@ export default class Paint extends React.Component {
         }
 
         this.lastPointerPositionTemp = pos;
-        // stage.draw();
-        console.log(child);
-        // if (img.parent.id === 'group') {
-        //     img.parent.parent.draw();
-        // } else {
-        //     img.parent.draw();
-        // }
         if (img.parent.id === 'group') {
             child.parent.parent.draw();
         } else {

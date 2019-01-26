@@ -61,13 +61,6 @@ export default class Mouse extends React.Component {
     }
 
     mouseDown = (event) => {
-        // let e = window.event; FOR MAC OS
-        // if (e.button === 0) {
-            //     this.state.isDrawing = true;
-            //     this.state.isMouseOnCanvas = true;
-            //     this.state.lastPointerPosition = this.stage.getPointerPosition();
-            //     this.Paint.getPosition(this.state.lastPointerPosition);
-            // }
         if (event.evt.button === 0) {
             this.state.isDrawing = true;
             this.state.isMouseOnCanvas = true;
@@ -129,7 +122,6 @@ export default class Mouse extends React.Component {
                                     ch.y(y / this.stage.scaleY());
 
                                     this.stage.draw();
-                                    console.log(ch);
                                 }
                             }
                         });
@@ -164,8 +156,12 @@ export default class Mouse extends React.Component {
         let height = parseInt(window.getComputedStyle(el).height, 10);
         let x = this.stage.getPointerPosition().x;
         let y = this.stage.getPointerPosition().y;
+
+        let navBar = document.querySelector('.nav-bar');
+        let navBarHeight = parseInt(window.getComputedStyle(navBar).height, 10);
+
         el.style.left = (x - (width / 2)) + 'px';
-        el.style.top = (y + 80 - (height / 2)) + 'px'; // 80 is header hight
+        el.style.top = (y + navBarHeight - (height / 2)) + 'px';
         el.style.width = (size * this.stage.scaleX()) + 'px';
         el.style.height = (size * this.stage.scaleY()) + 'px';
         if (this.mode === 'pencil')
@@ -178,7 +174,6 @@ export default class Mouse extends React.Component {
         const lm = document.querySelector(node);
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         if (document.querySelector(node)) {
-            // document.querySelector(node).oncontextmenu = dragMouseDown;
             document.querySelector(node).addEventListener('mousedown', (event) => {
                 if (event.button === 2)
                     dragMouseDown(event);

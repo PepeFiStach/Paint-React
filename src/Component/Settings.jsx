@@ -1,6 +1,5 @@
 import React from 'react';
 import Mouse from '../Functionality/Mouse';
-//import settings from '../Image/icons/settings-var-flat/512x512.png';
 import settings from '../Image/icons2/settings-outline/512x512.png';
 
 export default class Settings extends React.Component {
@@ -490,7 +489,6 @@ export default class Settings extends React.Component {
                             <li>
                                 <button
                                     onMouseDown={() => {
-                                        // this.setShape('rect');
                                         this.setBezier('create-bezier', true);
                                     }}>
                                         Create bezier

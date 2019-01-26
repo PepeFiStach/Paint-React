@@ -1,6 +1,4 @@
 import React from 'react';
-//import eraser from '../../Image/eraser.png';
-//import eraserWhite from '../../Image/eraser-white.png';
 import eraser from '../../Image/icons2/edit-outline/512x512eraserw.png';
 import eraserBlack from '../../Image/icons2/edit-outline/512x512eraserb.png'
 import Mouse from '../../Functionality/Mouse';

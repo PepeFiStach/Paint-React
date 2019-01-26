@@ -55,9 +55,12 @@ export default class ColorPicker extends React.Component {
             y : parseInt(window.getComputedStyle(this.colorPicker).top, 10),
             width : parseInt(window.getComputedStyle(this.colorPicker).width, 10),
         }
+
+        let colorStripEl = document.querySelector('#color-strip');
+        let colorStripElWidth = parseInt(window.getComputedStyle(colorStripEl).width, 10);
         
         let pos = {
-            x: this.x - image.x - image.width + 35, // 35 = colorStrip.width(30px) + padding(5px);
+            x: this.x - image.x - image.width + colorStripElWidth + 5, // 35 = colorStrip.width(30px) + padding(5px);
             y: this.y - image.y - 5, // 5 = padding(5px);
         };
 

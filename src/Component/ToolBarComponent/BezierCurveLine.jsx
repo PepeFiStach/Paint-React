@@ -1,7 +1,5 @@
 import React from 'react';
 import Konva from 'konva';
-//import bezier from '../../Image/pencil.jpg';
-//import bezierWhite from '../../Image/pencil-white.png';
 import bezier from '../../Image/icons2/stop-outline/512x512bgw.png';
 import bezierBlack from '../../Image/icons2/stop-outline/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';

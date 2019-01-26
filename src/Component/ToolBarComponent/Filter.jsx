@@ -1,6 +1,4 @@
 import React from 'react';
-//import filter from '../../Image/move.jpg';
-//import filterWhite from '../../Image/move-white.jpg';
 import filter from '../../Image/icons2/options-horizontal-outline/512x512bgw.png';
 import filterBlack from '../../Image/icons2/options-horizontal-outline/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';

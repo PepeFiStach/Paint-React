@@ -1,7 +1,5 @@
 import React from 'react';
 import Konva from 'konva';
-//import bezier from '../../Image/move.jpg';
-//import bezierWhite from '../../Image/move-white.jpg';
 import bezier from '../../Image/icons2/bezier-curve/512x512bgw.png';
 import bezierBlack from '../../Image/icons2/bezier-curve/512x512bgb.png'
 import Mouse from '../../Functionality/Mouse';
@@ -52,46 +50,9 @@ export default class BezierCurve extends React.Component {
     }
 
     createBezier = (canvas, _stageLayers, drawingPlace, stage, bezierSize, color) => {
-        // let ctx = canvas.getContext('2d');
-
-        // ctx.lineWidth = bezierSize;
-        // console.log(bezierSize);
-        // ctx.globalCompositeOperation = 'source-over';
-        // ctx.strokeStyle = color;
-
-        // let img = new Konva.Image({
-        //     image: canvas,
-        //     id: 'bezierImage',
-        //     width: canvas.width,
-        //     height: canvas.height,
-        //     x: 0,
-        //     y: 0,
-        //     visible: true,
-        // });
-
-        // let line = new Konva.Line({
-        //     points: [5, 70, 140, 23, 250, 60, 300, 20],
-        //     stroke: 'red',
-        //     strokeWidth: 15,
-        //     lineCap: 'round',
-        //     lineJoin: 'round',
-        //     bezier: true,
-        // });
-
-        // let group = new Konva.Group({
-        //     // width: canvas.width,
-        //     // height: canvas.height,
-        //     id: 'bezierGroup',
-        // });
-
-        // group.add(img);
-        // group.add(line);
-        // _stageLayers.add(group);
-        // stage.draw();
         const bezier = new Konva.Line({
             id: 'bezierLine',
             name: 'shape',
-            //points: [5, 70, 140, 23, 250, 60, 300, 20],
             stroke: color,
             strokeWidth: bezierSize,
             lineCap: 'round',
@@ -120,16 +81,11 @@ export default class BezierCurve extends React.Component {
             id: 'anchor'
         });
         let bezierGroup = stage.find('#bezierGroup');
-        console.log(bezierGroup);
         if (bezierGroup.length === 0) {
             // return;
         }
         bezierGroup[0].add(anchor);
         stage.draw();
-
-        // anchor.on('dragend', () => {
-
-        // })
     }
 
     mouseClick = () => {

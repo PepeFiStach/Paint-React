@@ -1,7 +1,5 @@
 import React from 'react';
 import Konva from 'konva';
-//import resize from '../../Image/pencil.jpg';
-//import resizeWhite from '../../Image/pencil-white.png';
 import resize from '../../Image/icons2/popout-outline/512x512bgw.png';
 import resizeBlack from '../../Image/icons2/popout-outline/512x512bgb.png'
 import Mouse from '../../Functionality/Mouse';
@@ -101,21 +99,17 @@ export default class Resize extends React.Component {
         const stageLayer = this.props.returnStage().children;
         const elMove = document.querySelector('.resize-img');
 
-        // let this.preventMultipleFor3 = true;
-
         layerManagement.forEach((layerFromManagement) => {
             stageLayer.forEach(layerFromStage => {
                 if (layerFromManagement.activeLayer === 'true') {
                     if (layerFromManagement.key === layerFromStage._id) {
                         const transformer = new Konva.Transformer({
                             id: 'transformer',
-                            // anchorSize: 2,
                             rotateEnabled: false, // For now rotate are disabled
                         });
                         layerFromStage.children.forEach(ch => {
                             if (ch.id() === 'group') {
                                 if (this.state.mode === 'resize') {
-                                    // ch.draggable(true);
                                     if (ch.children[0].className === 'Rect' 
                                         || ch.children[0].className === 'Star'
                                         || ch.children[0].className === 'Arrow'
@@ -141,7 +135,6 @@ export default class Resize extends React.Component {
                                         
                                         elMove.click();
                                         elMove.click();
-                                        // transformer.getLayer().batchDraw();
                                         this.props.returnStage().draw();
                                         this.preventMultipleFor2 = false;
 
@@ -155,7 +148,6 @@ export default class Resize extends React.Component {
                                         layer.add(children);
                                         this.props.returnStage().draw();
 
-                                        // ch.draggable(false);
                                         for (let i = 0; i < this.lastIndex - this.currentIndex; i++) {
                                             layerFromStage.moveDown();
                                         }

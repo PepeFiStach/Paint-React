@@ -1,7 +1,5 @@
 import React from 'react';
 import Konva from 'konva';
-//import text from '../../Image/pencil.jpg';
-//import textWhite from '../../Image/pencil-white.png';
 import text from '../../Image/icons2/text/512x512bgw.png';
 import textBlack from '../../Image/icons2/text/512x512bgb.png';
 import Mouse from '../../Functionality/Mouse';
@@ -59,12 +57,8 @@ export default class Text extends React.Component {
 
         group.add(textNode);
         _stageLayers.add(group);
-        // console.log(_stageLayers);
 
         textNode.on('dblclick', () => {
-            // create textarea over canvas with absolute position
-
-            // first we need to find its positon
             var textPosition = textNode.getAbsolutePosition();
             var stageBox = stage.getContainer().getBoundingClientRect();
 
@@ -74,7 +68,6 @@ export default class Text extends React.Component {
             };
 
 
-            // create textarea and style it
             var textarea = document.createElement('textarea');
             document.body.appendChild(textarea);
 
@@ -87,7 +80,6 @@ export default class Text extends React.Component {
 
             textarea.addEventListener('keydown', function (e) {
                 // hide on esc
-                console.log(e.keyCode);
                 if (e.keyCode === 27) {
                     textNode.text(textarea.value);
                     stage.draw();

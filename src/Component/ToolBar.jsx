@@ -26,9 +26,6 @@ export default class ToolBar extends React.Component {
         this.lastIndex = 0;
         this.currentIndex = 0;
 
-        // this.lastIndex2 = 0;
-        // this.currentIndex2 = 0;
-
         this.state.buttonTab.push(this.eraser);
         this.state.buttonTab.push(this.move);
         this.state.buttonTab.push(this.pencil);
@@ -62,7 +59,6 @@ export default class ToolBar extends React.Component {
                 if (layerFromManagement.activeLayer === 'true') {
                     if (layerFromManagement.key === layerFromStage._id) {
                         layerFromStage.children.forEach(ch => {
-                            console.log(ch);
                             if (ch.id() === 'group' || ch.id() === 'bezierGroup') {
                                 if (stateMode === 'move') {
                                     if (this.preventMultipleFor2) {
@@ -165,7 +161,6 @@ export default class ToolBar extends React.Component {
                     changeText={this.changeText}/>
                 <ColorPicker changeColor={this.changeColor}/>
             </div>
-                //<ColorPallete changeColor={this.changeColor}/> 
         )
     }
 }
