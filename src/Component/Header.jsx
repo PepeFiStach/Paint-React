@@ -29,7 +29,7 @@ export default class Header extends React.Component {
                         <span></span>
                 </div>
                 <li className='nav-bar-iteam logo'>
-                    <a>LOGO</a>
+                    <a>Pluma</a>
                 </li>
                 {/* <li className='nav-bar-iteam'>
                     <a onClick={this.props.popCanvasOptions}>
@@ -87,7 +87,7 @@ export default class Header extends React.Component {
                     <li className='nav-bar-iteam'>
                         <button className={'draw'} onClick={this.props.popCanvasOptions}>
                             <a>
-                                NEW
+                                New
                             </a>
                             <img src={newFile} width={28} height={28}></img>
                         </button>
@@ -104,7 +104,7 @@ export default class Header extends React.Component {
                 <li className='nav-bar-iteam'>
                     <button className='draw' onClick={this.props.saveImg}>
                         <a>
-                            SAVE
+                            Save
                         </a>
                         <img src={download} width={28} height={28}></img>
                     </button>
@@ -120,28 +120,30 @@ export default class Header extends React.Component {
                         </li>
                         <li>
                             <label htmlFor='canvas-width'>
-                                WIDTH (in pxl)
+                                Width (in px)
                             </label>
 
                             <input id='canvas-width'
-                                className='canvas-options-input' >
+                                className='canvas-options-input' 
+                                type='number' min='0' max='5000'>
                             </input>
                         </li>
 
                         <li>
                             <label htmlFor='canvas-height'>
-                                HEIGHT (in pxl)
+                                Height (in px)
                             </label>
 
                             <input id='canvas-height'
-                                className='canvas-options-input'>
+                                className='canvas-options-input'
+                                type='number' min='0' max='5000'>
                             </input>
                         </li>
 
                         <li>
                             <button className='canvas-otpions-btn'
                                 onClick={this.props.add}>
-                                CREATE CANVAS
+                                Create
                             </button>
                         </li>
                     </ul>

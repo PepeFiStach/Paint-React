@@ -1,4 +1,5 @@
 import './App.css';
+import './Queries.css';
 import React from 'react';
 import { Stage, Layer, Rect } from 'react-konva';
 import Konva from 'konva';
@@ -28,6 +29,7 @@ export default class AppTest extends React.Component {
       sizeBezier: 5,
       shape: 'none',
       bezier: 'none',
+      alpha : '100',
       text: 'off',
       brush: 'default',
       createBezierBtnClicked: false,
@@ -60,9 +62,15 @@ export default class AppTest extends React.Component {
       end: 0,
     };
     this.saveFirstBezierPosition = undefined;
-    this.saveCanvas = 0;
+    this.saveLine = 0;
     this.saveBezier = 0;
     this.endPaintShape = false;
+
+    this.navBar = document.querySelector('.nav-bar');
+    this.footer = document.querySelector('footer');
+
+    this.navBarHeight = parseInt(window.getComputedStyle(this.navBar).height, 10);
+    this.footerHeight = parseInt(window.getComputedStyle(this.footer).height, 10);
 
     this.getStage.on('mousedown', (e) => {
       if (e.evt.button === 2) {
@@ -102,10 +110,9 @@ export default class AppTest extends React.Component {
     this.Mouse = new Mouse(this.props, this.getStage, this.state, 
                           this.state.mode, this.state.color, 
                           this.state.sizePencil, this.state.brush,
-                          this.state.sizeEraser, this.state.shape);
+                          this.state.sizeEraser, this.state.shape, this.state.alpha);
     console.log(this.getStage);
     console.log(this.state.mode);
-    console.log('Test for gh-pages ver.2');
     if (this.state.shape === 'rect' 
         || this.state.shape === 'star' 
         || this.state.shape === 'arrow'
@@ -126,7 +133,13 @@ export default class AppTest extends React.Component {
         stageLayer.forEach((_stageLayers, i) => {
           if (_layersManagement.activeLayer === 'true') {
             if (_stageLayers._id === _layersManagement.key) {
-              this.saveAnchors = _stageLayers.find('Circle');
+              // this.saveAnchors = _stageLayers.find('Circle');
+              // this.saveAnchors.forEach(anchor => {
+              //   anchor.visible(true);
+              // });
+              this.saveAnchors = _stageLayers.find(node => {
+                return node.id() === 'anchor';
+              });
               this.saveAnchors.forEach(anchor => {
                 anchor.visible(true);
               });
@@ -195,7 +208,7 @@ export default class AppTest extends React.Component {
         // }
         this.getStage.draw();
       }
-      if (this.state.mode === 'text') {   
+      if (this.state.mode === 'text') {
         const { layerManagement } = this.state;
         const stageLayer = this.getStage.children;
 
@@ -222,6 +235,8 @@ export default class AppTest extends React.Component {
                 _stageLayers.children[0].children[0].y(localPos.y);
                 _stageLayers.children[0].children[0].text('Some Text');
                 // this.getStage.draw();
+                _layersManagement.isOnIt = true;
+                _stageLayers.attrs.isOnIt = true;
               }
             }
           });
@@ -246,26 +261,27 @@ export default class AppTest extends React.Component {
         this.endPaintShape = false;
         let anchors;
         if (this.state.mode === 'bezier' && this.state.createBezierBtnClicked === true) {
-          if (this.saveCanvas === 0) {
+          if (this.saveLine === 0) {
             // return;
           }
-          console.log(this.saveCanvas);
-          let ctx = this.saveCanvas.getContext('2d');
+          console.log(this.saveLine);
+          let line = this.saveLine;
           if (this.state.bezier !== 'modify-bezier') {
             let anchorss = this.getStage.find(node => {
-              return node.className === 'Circle' && node.id() === 'anchor'; 
+              // return node.className === 'Circle' && node.id() === 'anchor'; 
+              return node.id() === 'anchor'; 
             });
             anchorss.forEach(node => {
               node.visible(false);
               this.getStage.draw();
             });
             
-            ctx.clearRect(0, 0, this.saveCanvas.width, this.saveCanvas.height);
-            ctx.beginPath();
-            ctx.moveTo(this.anchorLocation.start.x, this.anchorLocation.start.y);
-            ctx.lineTo(this.anchorLocation.end.x, this.anchorLocation.end.y);
-            ctx.closePath();
-            ctx.stroke();
+            // ctx.clearRect(0, 0, this.saveLine.width, this.saveLine.height);
+            // ctx.beginPath();
+            // ctx.moveTo(this.anchorLocation.start.x, this.anchorLocation.start.y);
+            // ctx.lineTo(this.anchorLocation.end.x, this.anchorLocation.end.y);
+            // ctx.closePath();
+            // ctx.stroke();
             
             // this.getStage.draw();
             if (this.anchorLocation.center.x < 0)
@@ -279,7 +295,7 @@ export default class AppTest extends React.Component {
             this.BezierCurve.createAnchor(this.anchorLocation.center.x - 50, this.anchorLocation.center.y - 50, this.getStage);
             this.BezierCurve.createAnchor(this.anchorLocation.end.x, this.anchorLocation.end.y, this.getStage);
             anchors = this.getStage.find(node => {
-              return node.className === 'Circle' && node.visible();
+              return node.id() === 'anchor' && node.visible();
             });
           } else {
             anchors = this.saveAnchors;
@@ -288,16 +304,26 @@ export default class AppTest extends React.Component {
           }
 
           // let anchors = this.getStage.find('Circle');
+          this.line = this.getStage.find(node => {
+            return node.className === 'Line';
+          });
+          line.tension(0);
           anchors.forEach(anchor => {
             anchor.on('dragmove', () => {
-              ctx.clearRect(0, 0, this.saveCanvas.width, this.saveCanvas.height);
+              // ctx.clearRect(0, 0, this.saveLine.width, this.saveLine.height);
 
-              ctx.beginPath();
-              ctx.moveTo(anchors[0].attrs.x, anchors[0].attrs.y);
-              ctx.bezierCurveTo(anchors[1].attrs.x, anchors[1].attrs.y,
-                                anchors[2].attrs.x - 50, anchors[2].attrs.y - 50,
-                                anchors[3].attrs.x, anchors[3].attrs.y);
-              ctx.stroke();
+              // ctx.beginPath();
+              // ctx.moveTo(anchors[0].attrs.x, anchors[0].attrs.y);
+              // ctx.bezierCurveTo(anchors[1].attrs.x, anchors[1].attrs.y,
+              //                   anchors[2].attrs.x - 50, anchors[2].attrs.y - 50,
+              //                   anchors[3].attrs.x, anchors[3].attrs.y);
+              // ctx.stroke();
+              line.points([anchors[0].attrs.x, anchors[0].attrs.y, anchors[1].attrs.x, anchors[1].attrs.y,
+                anchors[2].attrs.x - 50, anchors[2].attrs.y - 50,
+                anchors[3].attrs.x, anchors[3].attrs.y]);
+              line.tension(0);
+              line.bezier(true);
+
               anchor.parent.parent.draw();
               // this.getStage.draw();
             });
@@ -331,20 +357,20 @@ export default class AppTest extends React.Component {
           // console.log(MinX);
           // console.log(MinY);
 
-          this.saveBezier.clipFunc(function(ctx, e) {
-            let tabX = [];
-            let tabY = [];
-            e.children.forEach(anchors => {
-              if (anchors.id() === 'anchor') {
-                tabX.push(anchors.x());
-                tabY.push(anchors.y());
-              }
-            });
-            let MaxX = Math.max.apply(Math, tabX);
-            let MaxY = Math.max.apply(Math, tabY);
+          // this.saveBezier.clipFunc(function(ctx, e) {
+          //   let tabX = [];
+          //   let tabY = [];
+          //   e.children.forEach(anchors => {
+          //     if (anchors.id() === 'anchor') {
+          //       tabX.push(anchors.x());
+          //       tabY.push(anchors.y());
+          //     }
+          //   });
+          //   let MaxX = Math.max.apply(Math, tabX);
+          //   let MaxY = Math.max.apply(Math, tabY);
 
-            let MinY = Math.min.apply(Math, tabY);
-            let MinX = Math.min.apply(Math, tabX);
+          //   let MinY = Math.min.apply(Math, tabY);
+          //   let MinX = Math.min.apply(Math, tabX);
             // ctx.clearRect(0, 0, 800, 800);
             // console.log(e);
             // ctx.beginPath();
@@ -371,9 +397,9 @@ export default class AppTest extends React.Component {
             // ctx.closePath();
             // // ctx.fill('nonzero');
             
-            ctx.clearRect(0, 0, 800, 800);
-            ctx.rect(MinX - 20, MinY - 20, (Math.abs(MaxX - MinX) + 40), (Math.abs(MinY - MaxY) + 40));
-          });
+            // ctx.clearRect(0, 0, 800, 800);
+            // ctx.rect(MinX - 20, MinY - 20, (Math.abs(MaxX - MinX) + 40), (Math.abs(MinY - MaxY) + 40));
+          //});
           this.getStage.draw();
         }
         console.log(this.state.bezier);
@@ -391,7 +417,7 @@ export default class AppTest extends React.Component {
           const { layerManagement } = this.state;
           const stageLayer = this.getStage.children;
           if (!this.endPaintShape)
-          return;
+            return;
           
           layerManagement.forEach(_layersManagement => {
             stageLayer.forEach(_stageLayers => {
@@ -428,46 +454,14 @@ export default class AppTest extends React.Component {
                       if (_stageLayers.children[0].children === undefined) {
                         // return;
                       }
-                      let img = _stageLayers.children[0].children[0].getImage();
-                      this.saveCanvas = img;
-                      this.saveBezier = _stageLayers.children[0];
-                      let ctx = img.getContext('2d');
-                      ctx.beginPath();
-                      localPos = {
-                        x: (((this.tmpPointerPosition.x
-                          - this.getStage.x()
-                          - groupX))
-                          / this.getStage.scaleX()),
-
-                        y: (((this.tmpPointerPosition.y
-                          - this.getStage.y()
-                          - groupY))
-                          / this.getStage.scaleY())
-                      }
+                      let line = _stageLayers.children[0].children[0];
+                      console.log(_stageLayers.children[0].children[0]);
+                      this.saveLine = line; // this.saveLine is saveLine
                       if (this.saveFirstBezierPosition === undefined)
-                      this.saveFirstBezierPosition = localPos;
-                      
-                      ctx.moveTo(localPos.x, localPos.y);
-                      // ctx.moveTo(this.saveFirstBezierPosition.x, this.saveFirstBezierPosition.y);
-                      // ctx.bezierCurveTo(localPos.x, localPos.y + 30, localPos.x + 50, localPos.y + 50, localPos.x + 100, localPos.y + 100);
+                        this.saveFirstBezierPosition = localPos;
 
-
-                      let pos = this.getStage.getPointerPosition();
-
-                      localPos = {
-                        x: (((pos.x
-                          - this.getStage.x()
-                          - groupX))
-                          / this.getStage.scaleX()),
-
-                        y: (((pos.y
-                          - this.getStage.y()
-                          - groupY))
-                          / this.getStage.scaleY())
-                      }
                       let centerX = (localPos.x - this.saveFirstBezierPosition.x) / 2;
                       let centerY = (localPos.y - this.saveFirstBezierPosition.y) / 2;
-
                       this.anchorLocation = {
                         start: this.saveFirstBezierPosition,
                         center: {
@@ -476,11 +470,17 @@ export default class AppTest extends React.Component {
                         },
                         end: localPos,
                       }
-
-                      ctx.lineTo(localPos.x, localPos.y);
-                      ctx.closePath();
-                      ctx.stroke();
-                      this.tmpPointerPosition = pos;
+                      // _stageLayers.children[0].children[0].x(localPos2.x);
+                      // _stageLayers.children[0].children[0].y(localPos2.y);
+                      //_stageLayers.children[0].children[0].width(localPos.x - localPos2.x);
+                      //_stageLayers.children[0].children[0].height(localPos.y - localPos2.y);
+                      _stageLayers.children[0].children[0].points([localPos.x, localPos.y, localPos2.x, localPos2.y]);
+                      this.globalLocalPositinX = localPos.x - localPos2.x;
+                      this.globalLocalPositinY = localPos.y - localPos2.y;
+                      console.log(_stageLayers.children[0].children[0]);
+                      
+                      _layersManagement.isOnIt = true;
+                      _stageLayers.attrs.isOnIt = true;
                       // this.getStage.draw();
                       _stageLayers.draw();
                     }
@@ -488,15 +488,24 @@ export default class AppTest extends React.Component {
                       if (_stageLayers.children[0].nodeType === 'Group') {
                         _stageLayers.children[0].children[0].x(localPos2.x);
                         _stageLayers.children[0].children[0].y(localPos2.y);
-                        _stageLayers.children[0].children[0].width(localPos.x - localPos2.x);
-                        _stageLayers.children[0].children[0].height(localPos.y - localPos2.y);
+                        // _stageLayers.children[0].children[0].width(localPos.x - localPos2.x);
+                        // _stageLayers.children[0].children[0].height(localPos.y - localPos2.y);
                         _stageLayers.children[0].children[0].fill(this.state.color);
                         _stageLayers.children[0].children[0].stroke(this.state.color);
+
+                        if (_stageLayers.children[0].children[0].className === 'Star') {
+                          _stageLayers.children[0].children[0].setInnerRadius(Math.abs(localPos.x - localPos2.x));
+                          _stageLayers.children[0].children[0].setOuterRadius(Math.abs(localPos.y - localPos2.y));
+                        } else {
+                          _stageLayers.children[0].children[0].width(localPos.x - localPos2.x);
+                          _stageLayers.children[0].children[0].height(localPos.y - localPos2.y);
+                        }
+
                         if (_stageLayers.children[0].children[0].className === 'Arrow')
                           _stageLayers.children[0].children[0].points([0, 0,
                             localPos.x - localPos2.x,
                             localPos.y - localPos2.y]);
-                        if (_stageLayers.children[0].children[0].className === 'Circle')
+                        if (_stageLayers.children[0].children[0].id() === 'circle')
                           if (_stageLayers.children[0].children[0].attrs.radius < 0)
                             _stageLayers.children[0].children[0].attrs.radius = 0;
 
@@ -507,6 +516,8 @@ export default class AppTest extends React.Component {
                             _stageLayers.children[0].children[0].attrs.radiusX = 0;
                         }
                         // this.getStage.draw();
+                        _layersManagement.isOnIt = true;
+                        _stageLayers.attrs.isOnIt = true;
                         _stageLayers.draw();
                       }
                     }
@@ -562,6 +573,10 @@ export default class AppTest extends React.Component {
     this.setState({ sizePencil: dataFromSettings });
   }
 
+  changeAlpha = (dataFromSettings) => {
+    this.setState({ alpha: dataFromSettings });
+  }
+
   changeSizeEraser = (dataFromSettings) => {
     this.setState({ sizeEraser: dataFromSettings });
   }
@@ -590,16 +605,19 @@ export default class AppTest extends React.Component {
     const canvasOptions = document.querySelector('.canvas-options');
     const back = document.querySelector('.back');
     const navBar = document.querySelector('.nav-bar');
+    const colorPicker = document.querySelector('#color-picker');
 
     if (canvasOptions.style.display === 'flex') {
       canvasOptions.style.display = 'none';
       back.style.display = 'none';
       navBar.style.zIndex = '1';
+      colorPicker.style.zIndex = '9999';
     }
     else {
       canvasOptions.style.display = 'flex';
       back.style.display = 'block';
       navBar.style.zIndex = 'initial';
+      colorPicker.style.zIndex = '1';
     }
   }
 
@@ -614,6 +632,8 @@ export default class AppTest extends React.Component {
     this.preventCenter = false;
     this.getStage.x(0);
     this.getStage.y(0);
+    this.getStage.scaleX(1);
+    this.getStage.scaleY(1);
 
     if (canvasHeightOptions.value >= 32 && canvasWidthOptions.value >= 32
       && !isNaN(canvasHeightOptions.value) && !isNaN(canvasWidthOptions.value)) {
@@ -692,7 +712,7 @@ export default class AppTest extends React.Component {
             // Center drawing place with height and width lower then stage width and hight
             this.getStage.x((this.getStage.width() - canvas.width) / 2);
             this.getStage.y((this.getStage.height() - canvas.height) / 2);
-            let saveScale = 1;
+            this.saveScale = 1;
             // Center drawing place with any sizePencil
             // here i resize and scale stage u can resize layer but replace stage with l
             if (canvas.width >= this.getStage.width() ||
@@ -708,16 +728,20 @@ export default class AppTest extends React.Component {
                 this.getStage.y((this.getStage.height() - (canvas.height * i)) / 2);
                 i = i - 0.01;
                 breaker++;
-                saveScale = i;
+                this.saveScale = i;
                 if (breaker === 100) {
                   return;
                 }
               }
             }
+            this.savePositionStage = {
+              x: this.getStage.x(),
+              y: this.getStage.y(),
+            };
             this.border.width(canvas.width);
             this.border.height(canvas.height);
-            this.border.strokeWidth(1 / saveScale);
-            console.log(saveScale);
+            this.border.strokeWidth(1 / this.saveScale);
+            console.log(this.saveScale);
 
             // Add img to drawing place
             // drawingPlace = img
@@ -754,7 +778,7 @@ export default class AppTest extends React.Component {
                 
               } else {
                 if (this.state.text === 'on') {
-                  this.Text.createTextArea(canvas, _stageLayers, drawingPlace, this.getStage);
+                  this.Text.createTextArea(canvas, _stageLayers, drawingPlace, this.getStage, this.state.mode);
                   return;
                 }
                 if (this.state.bezier === 'create-bezier') {
@@ -786,8 +810,10 @@ export default class AppTest extends React.Component {
                 this.Mouse.mouseMove(drawingPlace);
               });
             } else {
-              if (this.state.shape === 'rect') 
+              if (this.state.shape === 'rect') {
                 this.Shape.createRect(canvas, _stageLayers, drawingPlace, this.state.color);
+                //_layersManagement.isOnIt = true;
+              }
               else if (this.state.shape === 'star')
                 this.Shape.createStar(canvas, _stageLayers, drawingPlace, this.state.color);
               else if (this.state.shape === 'arrow')
@@ -813,7 +839,8 @@ export default class AppTest extends React.Component {
   offAllButtons = () => {
     if (this.state.mode !== 'bezier') {
       let anchors = this.getStage.find(node => {
-        return node.className === 'Circle' && node.id() === 'anchor';
+        // return node.className === 'Circle' && node.id() === 'anchor';
+        return node.id() === 'anchor';
       });
       // if (this.saveAnchors !== undefined) {
         //   this.saveAnchors.forEach(anchors => {
@@ -822,6 +849,7 @@ export default class AppTest extends React.Component {
           // }
       anchors.forEach(node => {
         node.visible(false);
+        console.log(node);
       });
     }
 
@@ -837,6 +865,11 @@ export default class AppTest extends React.Component {
         img.click();
       }
     });
+    let falseLayer = this.getStage.find(node => {
+      return node.attrs.isOnIt === false;
+    });
+    falseLayer.remove();
+    this.state.mode = 'default';
   }
 
   addImage = () => {
@@ -848,6 +881,7 @@ export default class AppTest extends React.Component {
         var img = new window.Image();
         img.src = FR.result;
         img.onload = () => {
+          this.state.mode = 'image';
           this.addLayer(img);
         };
       };
@@ -869,6 +903,7 @@ export default class AppTest extends React.Component {
 
   saveImg = () => {
     this.offAllButtons();
+    this.offAllButtons();
     const { widthFrame, heightFrame, filterTab } = this.state;
     const stageLayer = this.getStage.children;
     
@@ -882,59 +917,186 @@ export default class AppTest extends React.Component {
       if (_layers.visible() === false || _layers.id() === 'defaultLayer') {
         return;
       }
+      this.getStage.x(this.savePositionStage.x);
+      this.getStage.y(this.savePositionStage.y);
+      this.getStage.scaleX(this.saveScale);
+      this.getStage.scaleY(this.saveScale);
+      this.border.strokeWidth(1 / this.saveScale);
 
       _layers.children.forEach(_shape => {
         if (_shape.id() === 'group' || _shape.id() === 'bezierGroup') {
           _shape.children.forEach(_groupChildren => {
+            console.log(_groupChildren);
+            // this.getStage.x(this.savePositionStage.x);
+            // this.getStage.y(this.savePositionStage.y);
+            // this.getStage.scaleX(this.saveScale);
+            // this.getStage.scaleY(this.saveScale);
+            // this.border.strokeWidth(1 / this.saveScale);
             if (_groupChildren.id() === 'imgPlace') {
-              ctx.drawImage(_groupChildren.getImage(), _shape.x(), _shape.y());
+              ctx.drawImage(_groupChildren.getImage(), _shape.x(), _shape.y(), _groupChildren.attrs.width * _shape.scaleX(), _groupChildren.attrs.height * _shape.scaleY());
             } else if (_groupChildren.id() === 'drawingPlace'){
               childrenCanvas = _groupChildren.getImage();
-              ctx.drawImage(childrenCanvas, _shape.x(), _shape.y(), _shape.width(), _shape.height());
-            } else if (_groupChildren.name() === 'shape'){
-              let x = Math.abs((_groupChildren.x() * _shape.scaleX()) + _shape.x());
-              let y = Math.abs((_groupChildren.y() * _shape.scaleY()) + _shape.y());
-              let width = _groupChildren.width() * _shape.scaleX();
-              let height = _groupChildren.height() * _shape.scaleY();
+              ctx.drawImage(childrenCanvas, _shape.x(), _shape.y(), _groupChildren.attrs.width * _shape.scaleX(), _groupChildren.attrs.height * _shape.scaleY());
+            } else if (_groupChildren.name() === 'shape' || _groupChildren.id() === 'text'){
+              // console.log(_shape.scaleX());
+              // let x = (_groupChildren.x() * _shape.scaleX()) + _shape.x();
+              // let y = (_groupChildren.y() * _shape.scaleY()) + _shape.y();
+              // // let width = _groupChildren.attrs.width * _shape.scaleX();
+              // // let height = _groupChildren.attrs.height * _shape.scaleY();
+              // let width = _groupChildren.width() * _shape.scaleX();
+              // let height = _groupChildren.height() * _shape.scaleY();
+              // console.log(_groupChildren.x(), _shape.scaleX(), _shape.x());
+              // console.log(y);
+              // console.log(width);
+              // console.log(height);
+              // if (_groupChildren.id() === 'star') {
+              //   x = x - (_groupChildren.getOuterRadius() * _shape.scaleX());
+              //   y = y - (_groupChildren.getOuterRadius() * _shape.scaleY());
+              // }
+              // if (_groupChildren.id() === 'bezierLine') {
+              //   // x = 0;
+              //   // y = 0;
+              //   let minTab = [];
+              //   let min;
+              //   let save;
+                
+              //   _groupChildren.points().forEach((point, index) => {
+              //     if (_groupChildren.points().length === 4) {
+              //       // if (index === 0) {
+              //       //   // width = point;
+              //       // }
+              //       // if (index === 1) {
+              //       //   // height = point;
+              //       // }
+              //       // if (index === 2) {
+              //       //   x = point;
+              //       // }
+              //       // if (index === 3) {
+              //       //   y = point;
+              //       // }
+                    
+              //       // if (x > y && index === 3) {
+              //       //   console.log('ASDAHSFGASF');
+              //       //   width = width * (-1);
+              //       // }
+              //       // if (y > x && index === 3) {
+              //       //   height = height * (-1);
+              //       // }
+              //       // // width = width - x;
+              //       // // height = height - y;
+              //       // width = _groupChildren.toCanvas().width / this.getStage.scaleX();
+              //       // height = _groupChildren.toCanvas().height / this.getStage.scaleX();
+              //     } else {
+              //       // if (index === 0) {
+              //       //   x = point;
+              //       // }
+              //       // if (index === 1) {
+              //       //   y = point;
+              //       // }
+              //       // if (index === 6) {
+              //       //   width = point;
+              //       // }
+              //       // if (index === 7) {
+              //       //   height = point;
+              //       // }
+              //       // for (let index = 0; index < _groupChildren.points().length; index = index + 2) {
+              //       //   // this.min = Math.min.apply(..._groupChildren.points()[index]);
+              //       //   minTab.push(_groupChildren.points()[index]);
+              //       // }
+              //       // min = Math.min(...minTab);
+              //       // x = min;
+              //       // if (min === point) {
+              //       //   save = index + 1;
+              //       // }
+              //       // if (save === index) {
+              //       //   y = point;
+              //       // }
 
-              if (_groupChildren.id() === 'circle') {
-                x = x - (_groupChildren.radius() * _shape.scaleX());
-                y = y - (_groupChildren.radius() * _shape.scaleY());
-              } 
-              if (_groupChildren.id() === 'ellipse') {
-                x = x - (_groupChildren.radiusX() * _shape.scaleX());
-                y = y - (_groupChildren.radiusY() * _shape.scaleY());
-              }
-              if (_groupChildren.id() === 'arrow') {
-                _groupChildren.points().forEach((point, index) => {
-                  if (index === 2) {
-                    if (point < 0) {
-                      width = width * (-1);
-                    }
-                  }
-                  if (index === 3) {
-                    if (point < 0) {
-                      height = height * (-1);
-                    }
-                  }
-                });
-              }
-              childrenCanvas = _groupChildren.toCanvas();
-              ctx.drawImage(childrenCanvas, x, y, width, height);
-            } else if (_groupChildren.id() === 'text') {
-              let x = Math.abs((_groupChildren.x() * _shape.scaleX()) + _shape.x());
-              let y = Math.abs((_groupChildren.y() * _shape.scaleY()) + _shape.y());
-              let width = _groupChildren.width() * _shape.scaleX();
-              let height = _groupChildren.height() * _shape.scaleY();
+              //       // // width = width - x;
+              //       // // height = height - y;
+              //       // width = _groupChildren.toCanvas().width / this.getStage.scaleX();
+              //       // height = _groupChildren.toCanvas().height / this.getStage.scaleX();
+              //     }
 
-              childrenCanvas = _groupChildren.toCanvas();
-              ctx.drawImage(childrenCanvas, x, y, width, height);
-            } else if (_groupChildren.id() === 'bezierImage') {
-              // let x = Math.abs(_groupChildren.x() + _shape.x());
-              // let y = Math.abs(_groupChildren.y() + _shape.y());
-              childrenCanvas = _groupChildren.getImage();
-              ctx.drawImage(childrenCanvas, _shape.x(), _shape.y(), _groupChildren.width(), _groupChildren.height());
-            }
+              //     // width = _groupChildren.attrs.width;
+              //     // height = _groupChildren.attrs.height;
+
+              //   });
+              //   // line.points([anchors[0].attrs.x, anchors[0].attrs.y, anchors[1].attrs.x, anchors[1].attrs.y,
+              //   // anchors[2].attrs.x - 50, anchors[2].attrs.y - 50,
+              //   // anchors[3].attrs.x, anchors[3].attrs.y]);
+              //                         // _stageLayers.children[0].children[0].x(localPos2.x);
+              //         // _stageLayers.children[0].children[0].y(localPos2.y);
+              //         // _stageLayers.children[0].children[0].width(localPos.x - localPos2.x);
+              //         // _stageLayers.children[0].children[0].height(localPos.y - localPos2.y);
+              //   // width = _groupChildren.attrs.width * _shape.scaleX();
+              //   // height = _groupChildren.attrs.height * _shape.scaleY();
+              //   // _stageLayers.children[0].children[0].points([localPos.x, localPos.y, localPos2.x, localPos2.y]);
+              //   console.log(_groupChildren);
+              //   console.log(this.getStage.scaleX());
+              //   console.log(x);
+              //   console.log(y);
+              //   console.log(width);
+              //   console.log(height);
+              // }
+
+              // if (_groupChildren.id() === 'circle') {
+              //   x = x - (_groupChildren.radius() * _shape.scaleX());
+              //   y = y - (_groupChildren.radius() * _shape.scaleY());
+              //   console.log(_groupChildren);
+              //   console.log(x);
+              //   console.log(y);
+              //   console.log(width);
+              //   console.log(height);
+              // } 
+              // if (_groupChildren.id() === 'ellipse') {
+              //   x = x - (_groupChildren.radiusX() * _shape.scaleX());
+              //   y = y - (_groupChildren.radiusY() * _shape.scaleY());
+              // }
+              // if (_groupChildren.id() === 'arrow') {
+              //   _groupChildren.points().forEach((point, index) => {
+              //     if (index === 2) {
+              //       if (point < 0) {
+              //         width = width * (-1);
+              //       }
+              //     }
+              //     if (index === 3) {
+              //       if (point < 0) {
+              //         height = height * (-1);
+              //       }
+              //     }
+              //     console.log(x);
+              //     console.log(y);
+              //     console.log(width);
+              //     console.log(height);
+              //   });
+              // }
+              const canvasHeightOptions = document.querySelector('#canvas-height');
+              const canvasWidthOptions = document.querySelector('#canvas-width');
+              childrenCanvas = _shape.parent.toCanvas();
+              console.log(_shape.parent.toCanvas());
+              ctx.drawImage(childrenCanvas, this.getStage.x(), this.getStage.y(),
+                 canvasWidthOptions.value, canvasHeightOptions.value,
+                 0, 0,
+                 canvasWidthOptions.value / this.getStage.scaleX(), canvasHeightOptions.value / this.getStage.scaleY());
+              // childrenCanvas = _groupChildren.toCanvas();
+              // ctx.drawImage(childrenCanvas, x, y, width, height);
+            } 
+            // else if (_groupChildren.id() === 'text') {
+            //   let x = Math.abs((_groupChildren.x() * _shape.scaleX()) + _shape.x());
+            //   let y = Math.abs((_groupChildren.y() * _shape.scaleY()) + _shape.y());
+            //   let width = _groupChildren.width() * _shape.scaleX();
+            //   let height = _groupChildren.height() * _shape.scaleY();
+
+            //   childrenCanvas = _groupChildren.toCanvas();
+            //   ctx.drawImage(childrenCanvas, x, y, width, height);
+            // } 
+            // else if (_groupChildren.id() === 'bezierImage') {
+            //   // let x = Math.abs(_groupChildren.x() + _shape.x());
+            //   // let y = Math.abs(_groupChildren.y() + _shape.y());
+            //   childrenCanvas = _groupChildren.getImage();
+            //   ctx.drawImage(childrenCanvas, _shape.x(), _shape.y(), _groupChildren.width(), _groupChildren.height());
+            // }
           });
         } else {
           childrenCanvas = _shape.getImage();
@@ -970,18 +1132,39 @@ export default class AppTest extends React.Component {
         width = widthFrame;
         height = heightFrame;
       }
+      let layer;
+      if (this.state.mode === 'shape' || this.state.mode === 'text' || this.state.mode === 'bezier') {
+        layer = new Konva.Layer({
+          id: 'newLayer',
+          name: 'no',
+          attrs: {
+            isOnIt: false,
+          },
+          //Clip is for img to able move
+          clip: {
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+          }
+        });
+      } else {
+        layer = new Konva.Layer({
+          id: 'newLayer',
+          name: 'no',
+          attrs: {
+            isOnIt: true,
+          },
+          //Clip is for img to able move
+          clip: {
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+          }
+        });
 
-      let layer = new Konva.Layer({
-        id: 'newLayer',
-        name: 'no',
-        //Clip is for img to able move
-        clip: {
-          x: 0,
-          y: 0,
-          width: width,
-          height: height,
-        }
-      });
+      }
 
       this.defaultLayer.width(width);
       this.defaultLayer.height(height);
@@ -989,12 +1172,34 @@ export default class AppTest extends React.Component {
       this.getStage.add(layer);
       let layerTMP = layerManagement;
 
-      layerTMP.push({
-        name: layer.nodeType,
-        key: layer._id,
-        activeLayer: 'true',
-        isVisible: 'true',
-      });
+      // layerTMP.push({
+      //   name: layer.nodeType,
+      //   mode: this.state.mode,
+      //   key: layer._id,
+      //   isOnIt: true,
+      //   activeLayer: 'true',
+      //   isVisible: 'true',
+      // });
+
+      if (this.state.mode === 'shape' || this.state.mode === 'text' || this.state.mode === 'bezier') {
+        layerTMP.push({
+          name: layer.nodeType,
+          mode: this.state.mode,
+          key: layer._id,
+          isOnIt: false,
+          activeLayer: 'true',
+          isVisible: 'true',
+        });
+      } else {
+        layerTMP.push({
+          name: layer.nodeType,
+          mode: this.state.mode,
+          key: layer._id,
+          isOnIt: true,
+          activeLayer: 'true',
+          isVisible: 'true',
+        });
+      }
 
       this.addDrawingCanvas(width, height, isImg);
       this.setState({
@@ -1011,6 +1216,7 @@ export default class AppTest extends React.Component {
     const { layerManagement, buttonTab } = this.state;
     const stageLayer = this.getStage.children;
     let layerTMP = layerManagement;
+    console.log('Click Layer');
 
     stageLayer.forEach(_stageLayers => {
       _stageLayers.name('yes');
@@ -1042,6 +1248,7 @@ export default class AppTest extends React.Component {
     this.setState({
       layerManagement: layerTMP,
     });
+    this.offAllButtons();
   }
 
   setInvisible = (e) => {
@@ -1226,28 +1433,31 @@ export default class AppTest extends React.Component {
               <ul>
                 {
                   this.state.layerManagement.map((_layers, index) => {
-                    return (
-                      <div>
-                        <li id={_layers.key}
-                          key={_layers.key}
-                          name={_layers.activeLayer}
-                          onMouseDown={(e) => { this.offAllButtons(); this.clickLayer(e); }}
-                        >
-                          <div className={'invisible-btn'}
-                            id={_layers.key} 
-                            name={_layers.isVisible}>
+                    console.log(_layers);
+                    if (_layers.isOnIt) {
+                      return (
+                        <div>
+                          <li id={_layers.key}
+                            key={_layers.key}
+                            name={_layers.activeLayer}
+                            onMouseDown={(e) => { this.offAllButtons(); this.clickLayer(e); }}
+                          >
+                            <div className={'invisible-btn'}
+                              id={_layers.key}
+                              name={_layers.isVisible}>
                               <img src={visibleImage}
                                 id={_layers.key}
                                 name={_layers.isVisible}
                                 className={'invisible-btn-img'}
                                 onMouseDown={(e) => { this.offAllButtons(); this.setInvisible(e); }}>
-                                
                               </img>
-                          </div>
-                          {index} {_layers.name} {_layers.key}
-                        </li>
-                      </div>
-                    )
+                            </div>
+                            {/* {index} {_layers.name} {_layers.key} {_layers.mode} */}
+                            {index + 1} {_layers.mode}
+                          </li>
+                        </div>
+                      )
+                    }
                   })
                 }
               </ul>
@@ -1307,6 +1517,7 @@ export default class AppTest extends React.Component {
             />
             <Settings changeSizePencil={this.changeSizePencil}
               changeSizeEraser={this.changeSizeEraser}
+              changeAlpha={this.changeAlpha}
               changeSizeBezier={this.changeSizeBezier}
               mode={this.state.mode}
               color={this.state.color}
@@ -1319,7 +1530,7 @@ export default class AppTest extends React.Component {
             />
             <Stage className={'drawing-place stage'}
               width={window.innerWidth}
-              height={window.innerHeight - 100 - 13}
+              height={window.innerHeight - this.navBarHeight - this.footerHeight}
               onMouseMove={(e) => { this.Mouse.mouseCircle(e) }}
               ref={node => { this.stage = node }}
               fill={'red'}
@@ -1329,7 +1540,7 @@ export default class AppTest extends React.Component {
 
           <footer>
             <div className='footer-wrapper wrapper'>
-              Praca Inżynierska - Michał Adamkowski &copy; Uniwersytet Kazmierza Wielkiego Bydgoszcz 2018
+              Praca Inżynierska - Michał Adamkowski &copy; Uniwersytet Kazmierza Wielkiego Bydgoszcz 2019
             </div>
           </footer>
       </div>

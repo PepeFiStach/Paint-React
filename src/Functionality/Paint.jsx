@@ -11,7 +11,7 @@ export default class Paint extends React.Component {
         this.lastPointerPositionTemp = pos;
     }
     
-    startPainting = (child, img, mode, stage, isGroup, color, sizePencil, brush, sizeEraser) => {
+    startPainting = (child, img, mode, stage, isGroup, color, sizePencil, brush, sizeEraser, alpha) => {
         if (!child) {
             return;
         }
@@ -21,6 +21,7 @@ export default class Paint extends React.Component {
         if (mode === 'pencil') {
             ctx.lineWidth = sizePencil;
             ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = (alpha/100);
         }
         else if (mode === 'eraser') {
             ctx.lineWidth = sizeEraser;
@@ -151,6 +152,16 @@ export default class Paint extends React.Component {
                             1, 1);
                     }
                     break;
+                
+                case 'blender':
+                    let r = can.getBoundingClientRect();
+                    let x = localPos.x - r.left;
+                    let y = localPos.y - r.top;
+                    ctx.fillStyle = color;
+                    ctx.arc(x, y, sizePencil, 0, 2*Math.PI);
+                    ctx.fill();
+
+                    break;
 
                 default:
                     alert('Brush is undefined');
@@ -164,7 +175,7 @@ export default class Paint extends React.Component {
         // group[0].children[1].width(localPos.x);
         // group[0].children[1].height(localPos.y);
 
-        if (brush !== 'spray' || mode === 'eraser') {
+        if (brush !== 'spray' && brush !== 'blender' || mode === 'eraser') {
             ctx.lineTo(localPos.x, localPos.y);
             ctx.closePath();
             ctx.stroke();
@@ -172,10 +183,16 @@ export default class Paint extends React.Component {
 
         this.lastPointerPositionTemp = pos;
         // stage.draw();
+        console.log(child);
+        // if (img.parent.id === 'group') {
+        //     img.parent.parent.draw();
+        // } else {
+        //     img.parent.draw();
+        // }
         if (img.parent.id === 'group') {
-            img.parent.parent.draw();
+            child.parent.parent.draw();
         } else {
-            img.parent.draw();
+            child.parent.draw();
         }
     }
 }

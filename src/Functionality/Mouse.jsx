@@ -3,7 +3,7 @@ import Konva from 'konva';
 import Paint from './Paint.jsx';
 
 export default class Mouse extends React.Component {
-    constructor(props, stage, appState, mode, color, sizePencil, brush, sizeEraser, shape) {
+    constructor(props, stage, appState, mode, color, sizePencil, brush, sizeEraser, shape, alpha) {
         super(props);
 
         this.stage = stage;
@@ -14,6 +14,7 @@ export default class Mouse extends React.Component {
         this.brush = brush;
         this.sizeEraser = sizeEraser;
         this.shape = shape;
+        this.alpha = alpha;
         
         this.state = {
             isDrawing: false,
@@ -95,13 +96,13 @@ export default class Mouse extends React.Component {
                             if (_children.id() === 'drawingPlace') {
                                 isGroup = false;
                                 this.Paint.startPainting(_children, img, this.mode, stage, 
-                                    isGroup, this.color, this.sizePencil, this.brush, this.sizeEraser);
+                                    isGroup, this.color, this.sizePencil, this.brush, this.sizeEraser, this.alpha);
                             }
 
                             if (_children.id() === 'group') {
                                 isGroup = true;
                                 this.Paint.startPainting(_children.children[1], img, this.mode, stage, 
-                                    isGroup, this.color, this.sizePencil, this.brush, this.sizeEraser);
+                                    isGroup, this.color, this.sizePencil, this.brush, this.sizeEraser, this.alpha);
                             }
                         });
                     }

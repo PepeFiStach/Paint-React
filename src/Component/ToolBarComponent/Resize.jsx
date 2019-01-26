@@ -120,7 +120,8 @@ export default class Resize extends React.Component {
                                         || ch.children[0].className === 'Star'
                                         || ch.children[0].className === 'Arrow'
                                         || ch.children[0].className === 'Circle' 
-                                        || ch.children[0].className === 'Ellipse') {
+                                        || ch.children[0].className === 'Ellipse'
+                                        || ch.children[0].className === 'Text') {
                                             transformer.rotateEnabled(true);
                                         }
 

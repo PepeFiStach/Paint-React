@@ -66,11 +66,16 @@ export default class Shape extends React.Component {
 
     createStar = (canvas, _stageLayers, drawingPlace, color) => {
         const shape = new Konva.Star({
+            // x: -9999,
+            // y: -9999,
+            // numPoints: 5,
+            // innerRadius: canvas.width / 4,
+            // outerRadius: canvas.width / 4,
             x: -9999,
             y: -9999,
             numPoints: 5,
             innerRadius: canvas.width / 4,
-            outerRadius: canvas.width / 4,
+            outerRadius: canvas.width / 2,
             id: 'star',
             fill: color,
             name: 'shape',

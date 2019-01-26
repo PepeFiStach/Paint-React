@@ -32,6 +32,7 @@ export default class Settings extends React.Component {
             valueSizeBezier: 5,
             whichShape: '',
             bezier: '',
+            valueAlpha: '100',
         }
 
         this.Mouse = new Mouse();
@@ -59,6 +60,10 @@ export default class Settings extends React.Component {
 
     setSizePencil = (e) => {
         this.props.changeSizePencil(e.target.value);
+    }
+
+    setAlpha = (e) => {
+        this.props.changeAlpha(e.target.value);
     }
 
     setSizeBezier = (e) => {
@@ -152,7 +157,7 @@ export default class Settings extends React.Component {
         const { valueBlur, valueBrightness, valueContrast,
             valueGrayscale, valueHueRotate, valueInvert, 
             valueOpacity, valueSaturate, valueSepia,
-            valueSizePencil, valueSizeEraser, valueSizeBezier} = this.state;
+            valueSizePencil, valueSizeEraser, valueSizeBezier, valueAlpha} = this.state;
 
         switch (this.props.mode) {
             case this.modes.PENCIL:
@@ -165,19 +170,19 @@ export default class Settings extends React.Component {
                                 width={15}
                                 height={15}
                             ></img>
-                            <p>pencil</p>
+                            <p>Pencil</p>
                         </li>
                         <ul>
                             <li className={'pencil-size-options'}>
-                                <label htmlFor='size'>pencil size</label>
+                                <label htmlFor='Size'>Pencil size</label>
                                 <input id='size' type='text' value={valueSizePencil}
                                     onMouseLeave={(e) => {e.target.blur()}}
                                     onClick={(e) => { e.target.select() }}
                                     onChange={(e) => { 
                                         this.state.valueSizePencil = e.target.value;
                                         this.setSizePencil(e)
-                                        if (!e.target.value || e.target.value === '0') {
-                                            this.state.valueSizePencil = 5;
+                                        if (!e.target.value || e.target.value === '0' || e.target.value < 0) {
+                                            this.state.valueSizePencil = valueSizePencil;
                                             alert('Pencil size can not be a 0 or null');
                                         }
                                     }}
@@ -192,7 +197,17 @@ export default class Settings extends React.Component {
                                     <option value="shadow">Shadow</option>
                                     <option value="thick-brush">Thick brush</option>
                                     <option value="spray">Spray</option>
+                                    <option value="blender">Blender</option>
                                 </select>
+                            </li>
+                            <li>
+                                <label for="blenderAlpha">Alpha:</label>
+                                <input id="blenderAlpha" type="range" min='0' max='100' value={valueAlpha}
+                                    onChange={(e) => { 
+                                        this.state.valueAlpha = e.target.value;
+                                            this.setAlpha(e);
+                                        }}>
+                                </input>
                             </li>
                             <li className={'rgb-options'}>
                                 <label htmlFor='color-R'>R</label>
@@ -223,9 +238,12 @@ export default class Settings extends React.Component {
                                 >
                                 </input>
                             </li>
-                            <div className={'color-box-wrapper'}>
-                                <div id='color-box'></div>
-                            </div>
+                            <li>
+                                <label>Color</label>
+                                <div className={'color-box-wrapper'}>
+                                    <div id='color-box'></div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 )
@@ -240,19 +258,19 @@ export default class Settings extends React.Component {
                             width={15}
                             height={15}
                         ></img>
-                        <p>eraser</p>
+                        <p>Eraser</p>
                         </li>
                         <ul>
                             <li>
-                                <label htmlFor='size'>eraser size</label>
+                                <label htmlFor='size'>Eraser size</label>
                                 <input id='size' type='text' value={valueSizeEraser}
                                     onMouseLeave={(e) => { e.target.blur() }}
                                     onClick={(e) => { e.target.select() }}
                                     onChange={(e) => { 
                                         this.state.valueSizeEraser = e.target.value;
                                         this.setSizeEraser(e);
-                                        if (!e.target.value || e.target.value === '0') {
-                                            this.state.valueSizeEraser = 5;
+                                        if (!e.target.value || e.target.value === '0' || e.target.value < 0) {
+                                            this.state.valueSizeEraser = valueSizeEraser;
                                             alert('Eraser size can not be a 0 or null');
                                         }
                                     }}>
@@ -272,11 +290,11 @@ export default class Settings extends React.Component {
                                 width={15}
                                 height={15}
                             ></img>
-                            <p>filter</p>
+                            <p>Filter</p>
                         </li>
                         <ul>
                             <li>
-                                <label htmlFor='blur'>blur {valueBlur}px</label>
+                                <label htmlFor='blur'>Blur {valueBlur}px</label>
                                 <input id='blur' type='range'
                                     min='0' max='20' value={valueBlur}
                                     onChange={(e) => { 
@@ -287,7 +305,7 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='brightness'>brightness {valueBrightness}%</label>
+                                <label htmlFor='brightness'>Brightness {valueBrightness}%</label>
                                 <input id='brightness' type='range'
                                     min='0' max='500' value={valueBrightness}
                                     onChange={(e) => {
@@ -298,8 +316,9 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='contrast'>contrast {valueContrast}%</label>
+                                <label htmlFor='contrast'>Contrast {valueContrast}%</label>
                                 <input id='contrast' type='range'
+                                    min='0' max='100' value={valueContrast}
                                     onChange={(e) => {
                                         this.state.valueContrast = e.target.value;
 
@@ -309,7 +328,7 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='grayscale'>grayscale {valueGrayscale}%</label>
+                                <label htmlFor='grayscale'>Grayscale {valueGrayscale}%</label>
                                 <input id='grayscale' type='range'
                                     min='0' max='100' value={valueGrayscale}
                                     onChange={(e) => {
@@ -321,7 +340,7 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='hue-rotate'>hue rotate {valueHueRotate}deg</label>
+                                <label htmlFor='hue-rotate'>Hue rotate {valueHueRotate}deg</label>
                                 <input id='hue-rotate' type='range'
                                     min='0' max='360' value={valueHueRotate}
                                     onChange={(e) => {
@@ -333,7 +352,7 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='invert'>invert {valueInvert}%</label>
+                                <label htmlFor='invert'>Invert {valueInvert}%</label>
                                 <input id='invert' type='range'
                                     min='0' max='100' value={valueInvert}
                                     onChange={(e) => {
@@ -345,7 +364,7 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='opacity'>opacity {valueOpacity}%</label>
+                                <label htmlFor='opacity'>Opacity {valueOpacity}%</label>
                                 <input id='opacity' type='range'
                                     min='0' max='100' value={valueOpacity}
                                     onChange={(e) => {
@@ -357,7 +376,7 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='saturate'>saturate {valueSaturate}%</label>
+                                <label htmlFor='saturate'>Saturate {valueSaturate}%</label>
                                 <input id='saturate' type='range'
                                     min='0' max='500' value={valueSaturate}
                                     onChange={(e) => {
@@ -369,7 +388,7 @@ export default class Settings extends React.Component {
                                 </input>
                             </li>
                             <li>
-                                <label htmlFor='sepia'>sepia {valueSepia}%</label>
+                                <label htmlFor='sepia'>Sepia {valueSepia}%</label>
                                 <input id='sepia' type='range'
                                     min='0' max='100' value={valueSepia}
                                     onChange={(e) => {
@@ -383,7 +402,7 @@ export default class Settings extends React.Component {
                             <li>
                                 <button id='reset'
                                     onMouseDown={() => { this.resetFilter() }}>
-                                    reset
+                                    Reset
                                 </button>
                             </li>
                         </ul>
@@ -401,7 +420,7 @@ export default class Settings extends React.Component {
                                 width={15}
                                 height={15}
                             ></img>
-                            <p>shape</p>
+                            <p>Shape</p>
                         </li>
                         <ul>
                             <li>
@@ -409,7 +428,7 @@ export default class Settings extends React.Component {
                                     onMouseDown={() => {
                                         this.setShape('rect');
                                     }}>
-                                        rect
+                                        Rect
                                 </button>
                             </li>
                             <li>
@@ -417,7 +436,7 @@ export default class Settings extends React.Component {
                                     onMouseDown={() => {
                                         this.setShape('star');
                                     }}>
-                                        star
+                                        Star
                                 </button>
                             </li>
                             <li>
@@ -425,7 +444,7 @@ export default class Settings extends React.Component {
                                     onMouseDown={() => {
                                         this.setShape('arrow');
                                     }}>
-                                        arrow
+                                        Arrow
                                 </button>
                             </li>
                             <li>
@@ -433,7 +452,7 @@ export default class Settings extends React.Component {
                                     onMouseDown={() => {
                                         this.setShape('circle');
                                     }}>
-                                        circle
+                                        Circle
                                 </button>
                             </li>
                             <li>
@@ -441,12 +460,15 @@ export default class Settings extends React.Component {
                                     onMouseDown={() => {
                                         this.setShape('ellipse');
                                     }}>
-                                        ellipse
+                                        Ellipse
                                 </button>
                             </li>
-                            <div className={'color-box-wrapper'}>
-                                <div id='color-box'></div>
-                            </div>
+                            <li>
+                                <label>Color</label>
+                                <div className={'color-box-wrapper'}>
+                                    <div id='color-box'></div>
+                                </div>
+                            </li>
                         </ul>
                    </div>
                 )
@@ -462,7 +484,7 @@ export default class Settings extends React.Component {
                                 width={15}
                                 height={15}
                             ></img>
-                            <p>bezier curve</p>
+                            <p>Bezier curve</p>
                         </li>
                         <ul>
                             <li>
@@ -471,7 +493,7 @@ export default class Settings extends React.Component {
                                         // this.setShape('rect');
                                         this.setBezier('create-bezier', true);
                                     }}>
-                                        Create Bezier
+                                        Create bezier
                                 </button>
                             </li>
                             <li>
@@ -479,19 +501,19 @@ export default class Settings extends React.Component {
                                     onMouseDown={() => {
                                         this.setBezier('modify-bezier');
                                     }}>
-                                        Modify Bezier
+                                        Modify bezier
                                 </button>
                             </li>
                             <li className={'pencil-size-options'}>
-                                <label htmlFor='size'>pencil size</label>
+                                <label htmlFor='size'>Bezier size</label>
                                 <input id='size' type='text' value={valueSizeBezier}
                                     onMouseLeave={(e) => {e.target.blur()}}
                                     onClick={(e) => { e.target.select() }}
                                     onChange={(e) => { 
                                         this.state.valueSizeBezier = e.target.value;
                                         this.setSizeBezier(e)
-                                        if (!e.target.value || e.target.value === '0') {
-                                            this.state.valueSizeBezier = 5;
+                                        if (!e.target.value || e.target.value === '0' || e.target.value < 0) {
+                                            this.state.valueSizeBezier = valueSizeBezier;
                                             alert('Pencil size can not be a 0 or null');
                                         }
                                     }}
@@ -527,9 +549,12 @@ export default class Settings extends React.Component {
                                 >
                                 </input>
                             </li>
-                            <div className={'color-box-wrapper'}>
-                                <div id='color-box'></div>
-                            </div>
+                            <li>
+                                <label>Color</label>
+                                <div className={'color-box-wrapper'}>
+                                    <div id='color-box'></div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 )
@@ -544,7 +569,7 @@ export default class Settings extends React.Component {
                                 width={15}
                                 height={15}
                             ></img>
-                            <p>bucket</p>
+                            <p>Bucket</p>
                         </li>
                         <ul>
                             <li className={'rgb-options'}>
@@ -576,9 +601,12 @@ export default class Settings extends React.Component {
                                 >
                                 </input>
                             </li>
-                            <div className={'color-box-wrapper'}>
-                                <div id='color-box'></div>
-                            </div>
+                            <li>
+                                <label>Color</label>
+                                <div className={'color-box-wrapper'}>
+                                    <div id='color-box'></div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 )

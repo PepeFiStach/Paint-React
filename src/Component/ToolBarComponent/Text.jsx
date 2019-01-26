@@ -47,7 +47,7 @@ export default class Text extends React.Component {
         };
     }
 
-    createTextArea = (canvas, _stageLayers, drawingPlace, stage) => {
+    createTextArea = (canvas, _stageLayers, drawingPlace, stage, mode) => {
         const textNode = new Konva.Text({
             id: 'text',
             fontSize: 20,
@@ -86,7 +86,7 @@ export default class Text extends React.Component {
             textarea.focus();
 
             textarea.addEventListener('keydown', function (e) {
-                // hide on enter
+                // hide on esc
                 console.log(e.keyCode);
                 if (e.keyCode === 27) {
                     textNode.text(textarea.value);
